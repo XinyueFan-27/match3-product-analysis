@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>头部三消产品发行与买量深度分析（v7）</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
+<style>
+:root{
+  --bg:#f8f9fb; --bg2:#eef1f6; --card:#ffffff; --card2:#f3f6fa;
+  --line:#dde3ec; --line2:#c8d0dd;
+  --ink:#1a2233; --sub:#4a5568; --dim:#7b8aa3;
+  --accent:#2563eb; --accent2:#3b82f6; --accent-lt:#dbeafe;
+  --gold:#b45309; --gold-lt:#fef3c7;
+  --red:#dc2626; --red-lt:#fee2e2;
+  --green:#059669; --green-lt:#d1fae5;
+  --purple:#7c3aed; --purple-lt:#ede9fe;
+  --teal:#0d9488; --teal-lt:#ccfbf1;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.75;font-size:15px}
+
+.wrap{display:flex;max-width:1380px;margin:0 auto}
+
+/* TOC sidebar */
+.toc{position:sticky;top:0;align-self:flex-start;height:100vh;overflow-y:auto;width:260px;flex:none;padding:30px 18px 30px 28px;border-right:1px solid var(--line);background:var(--card)}
+.toc::-webkit-scrollbar{width:5px}.toc::-webkit-scrollbar-thumb{background:var(--line2);border-radius:5px}
+.toc .logo{font-size:11px;letter-spacing:.18em;color:var(--dim);text-transform:uppercase;margin-bottom:6px;font-weight:600}
+.toc h1{font-size:17px;font-weight:800;line-height:1.3;margin-bottom:20px;color:var(--ink)}
+.toc a{display:block;color:var(--sub);font-size:13px;padding:6px 11px;border-radius:7px;margin-bottom:1px;border-left:2px solid transparent;transition:.12s;text-decoration:none}
+.toc a:hover{background:var(--card2);color:var(--ink)}
+.toc a.sub{padding-left:24px;font-size:12px;color:var(--dim)}
+.toc .grp{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin:16px 0 5px 11px;font-weight:700}
+
+/* Main content */
+.content{flex:1;min-width:0;padding:50px 5vw 120px;max-width:960px}
+
+.hero{border-bottom:2px solid var(--accent);padding-bottom:36px;margin-bottom:42px}
+.hero .kick{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:14px}
+.hero h1{font-size:clamp(28px,4vw,44px);font-weight:800;line-height:1.15;letter-spacing:-.5px;margin-bottom:16px;color:var(--ink)}
+.hero p{color:var(--sub);font-size:16px;max-width:44em}
+.meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.tag{font-size:12px;padding:5px 12px;border:1px solid var(--line2);border-radius:100px;background:var(--card);color:var(--sub)}
+
+section{margin-bottom:52px;scroll-margin-top:24px}
+h2{font-size:clamp(22px,2.4vw,30px);font-weight:800;line-height:1.2;margin-bottom:6px;letter-spacing:-.3px;color:var(--ink)}
+h2 .num{font-family:"SF Mono",ui-monospace,monospace;font-size:.58em;color:var(--accent);font-weight:600;margin-right:10px}
+.h2sub{color:var(--dim);font-size:14px;margin-bottom:22px}
+h3{font-size:19px;font-weight:700;color:var(--accent);margin:28px 0 12px}
+h4{font-size:16px;font-weight:700;color:var(--ink);margin:20px 0 8px}
+p{color:var(--sub);margin-bottom:14px}
+strong{color:var(--ink);font-weight:700}
+.hl{color:var(--accent)}.gold{color:var(--gold)}.grn{color:var(--green)}.rd{color:var(--red)}.pur{color:var(--purple)}
+ul,ol{color:var(--sub);margin:0 0 16px 22px}li{margin-bottom:6px}
+
+/* Callout boxes */
+.lead{background:linear-gradient(135deg,var(--accent-lt),var(--card));border:1px solid var(--accent);border-left:4px solid var(--accent);border-radius:10px;padding:20px 24px;margin:20px 0;font-size:15px;color:var(--ink)}
+.lead .lb{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px}
+.warn{background:var(--gold-lt);border:1px solid var(--gold);border-radius:8px;padding:14px 18px;margin:16px 0;font-size:13.5px;color:#78350f}
+.warn .wb{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:4px}
+.note{background:var(--card2);border-left:3px solid var(--dim);border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0;font-size:13.5px;color:var(--sub)}
+
+/* Code blocks */
+.formula{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:20px 24px;margin:18px 0;font-size:13.5px;color:#cbd5e1;line-height:1.9;overflow-x:auto;white-space:pre;font-family:"SF Mono",ui-monospace,monospace}
+.formula .c{color:var(--accent2)}.formula .g{color:#fbbf24}.formula .r{color:#f87171}.formula .gr{color:#34d399}
+
+/* Tables */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px;display:block;overflow-x:auto}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--accent);font-weight:600;font-size:11px;letter-spacing:.04em;text-transform:uppercase;background:var(--card2)}
+td{color:var(--sub)}td strong{color:var(--ink)}
+tbody tr:hover{background:var(--card2)}
+
+/* Pyramid */
+.pyramid-wrap{display:flex;justify-content:center;align-items:flex-start;gap:40px;margin:30px 0;flex-wrap:wrap}
+.pyramid{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pyramid-tier{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;text-align:center;position:relative;transition:.3s}
+.pyramid-tier:hover{transform:scale(1.02);box-shadow:0 4px 20px rgba(0,0,0,.15)}
+.tier-top{width:280px;height:90px;background:linear-gradient(135deg,#dc2626,#b91c1c);border-radius:8px 8px 0 0;clip-path:polygon(18% 0,82% 0,100% 100%,0% 100%)}
+.tier-mid{width:400px;height:90px;background:linear-gradient(135deg,#2563eb,#1d4ed8);clip-path:polygon(12% 0,88% 0,100% 100%,0% 100%)}
+.tier-bot{width:520px;height:90px;background:linear-gradient(135deg,#059669,#047857);clip-path:polygon(8% 0,92% 0,100% 100%,0% 100%);border-radius:0 0 8px 8px}
+.pyramid-tier .tier-inner{padding:8px 20px}
+.pyramid-tier .tier-title{font-size:15px;font-weight:800;margin-bottom:2px}
+.pyramid-tier .tier-sub{font-size:11px;opacity:.85;font-weight:500}
+.pyramid-side{max-width:280px;flex:none}
+.pyramid-side h4{margin-top:0}
+.tier-detail{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:12px;font-size:13px}
+.tier-detail .td-h{font-weight:700;margin-bottom:4px;font-size:14px}
+.tier-detail .td-h.red{color:var(--red)}.td-h.blue{color:var(--accent)}.td-h.green{color:var(--green)}.td-h.purple{color:var(--purple)}
+.tier-detail .td-m{color:var(--dim);font-size:12px;margin-bottom:6px}
+
+/* Chart containers */
+.chart-box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:24px 0}
+.chart-box .cb-title{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.chart-box .cb-sub{font-size:12px;color:var(--dim);margin-bottom:14px}
+.chart-canvas-wrap{position:relative;height:360px}
+.phase-chart-wrap{height:420px}
+.chart-annotations{margin-top:14px;font-size:12px;color:var(--sub);line-height:1.8}
+.chart-annotations .ann-item{display:inline-block;margin-right:16px;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+
+/* Mode table (1.2) */
+.mode-table{width:100%;border-collapse:collapse;font-size:14px;margin:20px 0}
+.mode-table th{background:var(--bg2);font-size:12px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.05em;padding:10px 14px;text-align:left;border-bottom:2px solid var(--line2)}
+.mode-table td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.7}
+.mode-table tbody tr:hover{background:var(--card2)}
+.mode-table td:first-child{white-space:nowrap}
+.mode-table td:last-child{font-size:13px;white-space:nowrap}
+
+/* Stage badges */
+.stage-table{width:100%;font-size:13px}
+.stage-table td{padding:8px 10px;vertical-align:top}
+.stage-badge{display:inline-block;padding:2px 10px;border-radius:4px;font-size:11px;font-weight:700;color:#fff;white-space:nowrap}
+.sb-red{background:var(--red)}.sb-blue{background:var(--accent)}.sb-green{background:var(--green)}.sb-gold{background:var(--gold)}.sb-purple{background:var(--purple)}.sb-teal{background:var(--teal)}
+
+/* Strategy block */
+.strategy-block{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px 24px;margin:18px 0}
+.strategy-block .sb-head{font-size:14px;font-weight:700;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.strategy-block .sb-head .icon{font-size:18px}
+.strategy-block p{margin-bottom:10px;font-size:14px;line-height:1.85}
+.strategy-block .sb-metric{display:flex;gap:20px;flex-wrap:wrap;margin:10px 0;padding:10px 0;border-top:1px solid var(--line)}
+.strategy-block .sb-metric .m-item{font-size:13px}
+.strategy-block .sb-metric .m-item .m-val{font-weight:700;color:var(--ink);font-size:15px}
+.strategy-block .sb-metric .m-item .m-lab{color:var(--dim);font-size:11px}
+
+/* KSF cards */
+.ksf-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin:18px 0}
+.ksf-card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:14px 16px}
+.ksf-card .kc-num{font-size:11px;color:var(--accent);font-weight:700;letter-spacing:.1em}
+.ksf-card .kc-title{font-size:14px;font-weight:700;color:var(--ink);margin:4px 0 6px}
+.ksf-card .kc-desc{font-size:13px;color:var(--sub);line-height:1.7}
+.ksf-card .kc-metrics{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
+.ksf-card .kc-metrics span{display:inline-block;background:var(--accent);color:#fff;font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;white-space:nowrap}
+
+hr{border:none;border-top:1px solid var(--line);margin:40px 0}
+
+/* Responsive */
+@media(max-width:900px){
+  .wrap{flex-direction:column}
+  .toc{position:static;height:auto;width:100%;border-right:none;border-bottom:1px solid var(--line)}
+  .pyramid-wrap{flex-direction:column;align-items:center}
+  .pyramid-side{max-width:100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- TOC -->
+<nav class="toc">
+  <div class="logo">WorkBuddy Research</div>
+  <h1>头部三消产品发行与买量深度分析（v9）</h1>
+  <div class="grp">总览</div>
+  <a href="#summary">执行摘要</a>
+  <div class="grp">第一部分</div>
+  <a href="#p1">三代三消买量路径</a>
+  <a href="#p1-1" class="sub">1.1 核心等式</a>
+  <a href="#p1-2" class="sub">1.2 四种成功模式</a>
+  <a href="#p1-3" class="sub">1.3 出价能力差异</a>
+  <div class="grp">第二部分</div>
+  <a href="#p2">头部产品买量策略</a>
+  <a href="#p2-1" class="sub">2.1 Royal Match</a>
+  <a href="#p2-2" class="sub">2.2 Royal Kingdom</a>
+  <a href="#p2-3" class="sub">2.3 Match Villains</a>
+  <a href="#p2-4" class="sub">2.4 Project Makeover</a>
+  <a href="#p2-5" class="sub">2.5 其他产品</a>
+  <div class="grp">第三部分</div>
+  <a href="#p3">买量环境变化</a>
+  <div class="grp">第四部分</div>
+  <a href="#p4">发行门槛与能力</a>
+</nav>
+
+<!-- Main Content -->
+<main class="content">
+
+<!-- Hero -->
+<div class="hero">
+  <div class="kick">Match-3 UA Research · v9.0 · 2026.07.24</div>
+  <h1>头部三消产品发行与买量深度分析</h1>
+  <p>拆解历史上三代三消头部产品的买量路径与策略，回答"怎么买、如何支撑、当前环境下新品该怎么走、发行需要什么门槛"四个核心问题。</p>
+  <div class="meta">
+    <span class="tag">Sensor Tower 81国</span>
+    <span class="tag">AppGrowing 10产品</span>
+    <span class="tag">Tenjin 2026</span>
+    <span class="tag">Dream Games 审计报告</span>
+    <span class="tag">2021.1–2026.6</span>
+  </div>
+</div>
+
+<!-- 执行摘要 -->
+<section id="summary">
+  <h2><span class="num">★</span>执行摘要</h2>
+  <div class="lead">
+    <div class="lb">一页纸结论</div>
+    <strong>一个等式</strong>：三消能否跑出来 = <code>利润 = (LTV − CPI) × 安装量</code>。三条发力路径——提高LTV（承受更高CPI）、降低CPI（素材/生态）、扩大自然量（摊薄混合CPI）。<br><br>
+    <strong>三代四模式</strong>：第一代 Candy Crush 走<strong>品牌+自然量</strong>（付费仅24.7%，自然量71.7%）；第二代 Gardenscapes/Homescapes 走<strong>素材创新降CPI</strong>（fake ad）；第三代 Royal Match/Royal Kingdom 走<strong>极致LTV碾压</strong>（付费62.3%/72.3%，出价压制全渠道）；第四模式 AppLovin/Zynga 系的<strong>生态绑定/流量特权</strong>。
+  </div>
+  <p><strong>当前环境六大事实</strong>：AppLovin iOS 份额升至39%、ATT 使 iOS 广告收入占比从63%降至43%、AI 素材2026年占比预测破50%、平台严打 fake ad、可玩广告 IPM 高66%、Dream Games 系独占品类 SOV 51.3%。</p>
+  <p><strong>新品唯一可行路径</strong>：在 RM 已占据出价制高点的环境下，新品能突围的只有路径A——把 D30（成熟市场）做到 &gt;10%（理想 &gt;15%）、全球 ARPDAU &gt;$0.15（理想 &gt;$0.20）、D30/D1 留存韧性比 &gt;25%。2021年后跑出的新品无一例外走路径A；走路径B的 Triple Match 3D 天花板只有 RM 的 1/10。</p>
+  <p><strong>发行门槛</strong>（基于 RK/MV/KM 三个新品实测）：资金 2–3亿美元/年（极致留存路线）至 5000万–1亿/年（中等路线）；Soft Launch ≥12个月验证 D30&gt;10%；素材月产 100–200+ 条变体，AI 占比 &gt;50%；回本 9–18个月（大资本）至 12–24个月（中等）。</p>
+</section>
+
+<hr>
+
+<!-- Part 1 -->
+<section id="p1">
+  <h2><span class="num">01</span>第一部分：三代三消头部产品的买量路径与策略</h2>
+  <p class="h2sub">每一代"跑出来"的产品，走的都是截然不同的买量路径</p>
+  <table>
+    <thead><tr><th>代际</th><th>时间窗口</th><th>代表产品</th><th>买量路径</th><th>成功要素</th></tr></thead>
+    <tbody>
+      <tr><td><strong>第一代</strong></td><td>2012–2018</td><td>Candy Crush Saga</td><td>品牌+自然流量主导（路径C）</td><td>多年品牌积累→自然量占71.7%</td></tr>
+      <tr><td><strong>第二代</strong></td><td>2016–2022</td><td>Gardenscapes / Homescapes</td><td>素材创新降CPI（路径B）</td><td>"伪玩法"素材→CTR远超真实素材</td></tr>
+      <tr><td><strong>第三代</strong></td><td>2021–至今</td><td>Royal Match / Royal Kingdom</td><td>极致LTV碾压（路径A）</td><td>极致留存→极高LTV→出价压制</td></tr>
+    </tbody>
+  </table>
+
+  <h3 id="p1-1">1.1 三消买量的核心等式</h3>
+  <p>三消产品能否"跑出来"，本质上是一道算术题。要在这个等式中赚钱，只有三条路径——提高LTV承受更高CPI、降低CPI使同等LTV下利润更高、扩大自然量占比摊薄整体获客成本。这三条路径分别对应了历史上三代头部产品的成功模式。</p>
+  <div class="formula">利润 = (LTV − CPI) × 安装量
+
+其中：
+  LTV     = f(留存率, ARPDAU, 生命周期)
+  CPI     = f(素材效率, 平台竞争, 出价策略)
+  安装量  = f(预算规模, CPI, 自然量放大系数)
+
+三条路径：
+  <span class="c">路径A：LTV↑ → 可出价↑ → 赢得优质流量</span>
+  <span class="g">路径B：CPI↓（素材创新）→ 利润空间↑</span>
+  <span class="gr">路径C：有机下载↑ → 混合CPI↓</span></div>
+
+  <!-- 1.2 Four Validated Success Modes -->
+  <h3 id="p1-2">1.2 四种已验证的成功模式</h3>
+  <p>将上述核心等式映射到实际案例，三消品类已跑通的买量路径可归纳为<strong>四种成功模式</strong>。每种模式的出价能力来源不同，对应不同的资源禀赋和竞争策略。</p>
+
+  <table class="mode-table">
+    <thead><tr><th>模式</th><th>主路径</th><th>代表产品</th><th>核心做法</th><th>付费获客占比</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>① 极致LTV碾压</strong></td>
+        <td><span class="stage-badge sb-red">A</span></td>
+        <td>Royal Match、Royal Kingdom</td>
+        <td>极致产品→极高留存→极高LTV→出价压制竞品→赢得全渠道最优质流量</td>
+        <td><strong>RM 62.3%</strong><br><strong>RK 72.3%</strong></td>
+      </tr>
+      <tr>
+        <td><strong>② 素材创新降CPI</strong></td>
+        <td><span class="stage-badge sb-blue">B</span></td>
+        <td>Gardenscapes、Homescapes</td>
+        <td>"伪玩法"素材+叙事化创意→CTR/CVR远超行业→同预算获取更多安装→素材工厂化生产快速洗用户</td>
+        <td><strong>GS 47.8%</strong><br><strong>HS 43.4%</strong></td>
+      </tr>
+      <tr>
+        <td><strong>③ 品牌+自然流量主导</strong></td>
+        <td><span class="stage-badge sb-green">C</span></td>
+        <td>Candy Crush Saga</td>
+        <td>品牌资产+名人代言+社交裂变→自然量占比极高、买量为补充→混合CPI低</td>
+        <td><strong>CCS 24.7%</strong></td>
+      </tr>
+      <tr>
+        <td><strong>④ 生态绑定/流量特权</strong></td>
+        <td><span class="stage-badge sb-purple">B+C</span></td>
+        <td>AppLovin系（Project Makeover）<br>Zynga系（Toon Blast）</td>
+        <td>自有/绑定广告网络→提供一方产品数据优化投放模型+自有渠道投放→降低CPI</td>
+        <td><strong>PM 61.3%</strong><br><strong>TB 49.3%</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <strong>关键结论</strong>：模式①对产品的要求高、但一旦跑出上限高。模式②面临平台严打 fake ad + AI素材普及削平差异化 + 二合相似素材的出价竞争等多重挑战；模式③需要12年品牌积累，新品不具备时间窗口；模式④ 需要背靠广告平台资源</div>
+
+  <h3 id="p1-3">1.3 四种模式的出价能力差异</h3>
+  <p>四种模式的本质差异在于 <strong>CPI 出价能力的不同来源</strong>。</p><div>模式①的出价能力来自产品力——极高的留存（两倍于行业竞品水平），成熟市场的RPD $28.80 意味着每个下载值近 $29，可承受远高于品类均值的 CPI。</div><div>模式②的出价能力来自素材效率——fake ad 的 CTR 远超真实素材，同等预算获取更多安装。</div><div>模式③的出价能力来自品牌力和自然量——71.7% 自然量摊薄了混合 CPI，买量只需做增量补充。</div><div>模式④的出价能力来自依托自有广告平台的结构性成本优势。</div><p></p>
+
+  <table>
+    <thead><tr><th>出价层级</th><th>模式</th><th>代表产品</th><th>出价能力来源</th><th>关键指标（成熟市场）</th><th>典型CPI区间</th></tr></thead>
+    <tbody>
+      <tr><td><span class="stage-badge sb-red">高 CPI（出价碾压）</span></td><td>① 极致LTV</td><td>Royal Match</td><td>RPD $28.80 / 纯IAP / LTV极高 → 承受远超品类均值的CPI</td><td>D30 20.7% · D180 9.4% · RPD $28.80</td><td>上线初期 $7–12<br>稳定期 $2–5</td></tr>
+      <tr><td><span class="stage-badge sb-blue">中 CPI（创意取胜）</span></td><td>② 素材创新</td><td>Gardenscapes</td><td>"伪玩法"素材CTR极高 → CPI大幅降低、同预算获取更多安装</td><td>D30 11.6% · D180 4.0% · RPD $14.89</td><td>稳定期 $3–4</td></tr>
+      <tr><td><span class="stage-badge sb-green">低 CPI（品牌兜底）</span></td><td>③ 品牌主导</td><td>Candy Crush Saga</td><td>品牌自然量占71.7% → 混合CPI被大幅摊薄</td><td>D30 16.2% · D180 5.0% · RPD $18.18</td><td>稳定期 $1–2.5</td></tr>
+      <tr><td><span class="stage-badge sb-purple">流量优势</span></td><td>④ 生态绑定</td><td>Project Makeover</td><td>自有广告网络获客成本</td><td>D30 9.0% · D180 2.4% · RPD $7.52</td><td>上线初期$5-8</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note" style="border-left-color:var(--red);margin-top:16px">
+    <strong>⚠️ 对新品的启示</strong>：D30（成熟市场）&gt;15% + RPD &gt;$20 是"出价碾压"的硬性门槛。达不到这两个指标的产品，在当前环境下无法通过纯买量实现正ROI增长。Royal Match 证明了这条路径可行，Royal Kingdom 正在验证其可复制性。
+  </div>
+</section>
+
+<hr>
+
+<!-- Part 2 -->
+<section id="p2">
+  <h2><span class="num">02</span>第二部分：头部产品买量策略拆解</h2>
+  <p class="h2sub">Royal Match、Royal Kingdom、Match Villains 三个产品，按"发行阶段图表 → 策略细节 → KSF"结构拆解</p>
+
+  <!-- 2.1 Royal Match -->
+  <h3 id="p2-1">2.1 Royal Match——"产品力飞轮"驱动的完整发行路径</h3>
+  <p>Royal Match 是当前三消品类最成功的买量案例，其核心逻辑为"产品品质→高留存→高LTV→高出价→优质流量→更多高质量付费用户→LTV继续提升"的正向飞轮。其本质不是"砸钱砸出来的"，而是"因为产品足够好（LTV足够高），所以才能持续砸大钱而不亏"。</p>
+
+  <div class="chart-box">
+    <div class="cb-title">Royal Match 发行阶段：月下载量 vs 广告投放量（2020.07–2026.06）</div>
+    <div class="cb-sub">数据来源：Sensor Tower + 广大大 ｜ 柱状图=月下载（万） ｜ 折线=月广告数 ｜ 背景色=阶段划分</div>
+    <div class="chart-canvas-wrap phase-chart-wrap"><canvas id="chartRMPhase" width="1237" height="720" style="display: block; box-sizing: border-box; height: 360px; width: 618px;"></canvas></div>
+    <div class="chart-annotations">
+      <span class="ann-item" style="background:rgba(13,148,136,.1);color:#0d9488">● 测试期 2020.7–2021.2</span>
+      <span class="ann-item" style="background:rgba(220,38,38,.1);color:#dc2626">● 上升期 2021.3–2021.12</span>
+      <span class="ann-item" style="background:rgba(37,99,235,.1);color:#2563eb">● 平稳期 2022.1–2022.8</span>
+      <span class="ann-item" style="background:rgba(234,88,12,.1);color:#ea580c">● 爆发期 2022.9–2024.2</span>
+      <span class="ann-item" style="background:rgba(5,150,105,.1);color:#059669">● 稳定运营期 2024.3–至今</span>
+    </div>
+  </div>
+
+  <h4>1. 发行阶段策略</h4>
+  <table>
+    <thead><tr><th>阶段</th><th>时间</th><th>关键动作</th><th>累计下载</th><th>月流水</th><th>获客占比</th><th>资金来源</th><th>阶段买量消耗</th><th>平均CPI</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="stage-badge sb-teal">测试期</span></td>
+        <td>2020.7–2021.2</td>
+        <td>加拿大/土耳其/英国试运营，测试验证留存和LTV模型；<br>月均下载~13万；MAU 26万</td>
+        <td>103万</td>
+        <td>$12万</td>
+        <td>76.5%</td>
+        <td>种子轮750万美元</td>
+        <td>~$1,000万</td>
+        <td><strong>$12.63</strong></td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-red">上升期</span></td>
+        <td>2021.3–2021.12</td>
+        <td>全球同步上线，主攻北美，大力投入买量，上线10个月买量消耗2亿美金；<br>月均下载274万；MAU 707万</td>
+        <td>2,743万</td>
+        <td>均值$1,727万<br>峰值$2,900万</td>
+        <td>79.2%</td>
+        <td>A轮$5,000万(2021.3)<br>B轮$1.55亿(2021.6)</td>
+        <td>~$2亿</td>
+        <td><strong>$9.13</strong></td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-blue">平稳期</span></td>
+        <td>2022.1–2022.8</td>
+        <td>买量力度下降、维持一定力度买量；<br>月均下载维持在293万；MAU 1,417万</td>
+        <td>2,342万</td>
+        <td>均值$3,295万<br>峰值$3,645万</td>
+        <td>66.0%</td>
+        <td>流水</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-red">爆发期</span></td>
+        <td>2022.9–2024.2</td>
+        <td>买量大幅加大；主要因素：1）可玩广告上线；2）2023.2连胜奖励驱动收入×1.5，买量单价上限提高；3）获得C轮融资注入<br>月均下载大幅提升至904万；MAU翻倍至2,875万；月收入破亿</td>
+        <td>1.09亿</td>
+        <td>均值$6,356万<br>峰值$1.07亿</td>
+        <td>66.4%</td>
+        <td>流水+C轮$2.55亿(2022.1)</td>
+        <td>~$8.73亿<br>（含少量Royal Kingdom前期测试）</td>
+        <td><strong>$12.11</strong></td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-green">稳定运营期</span></td>
+        <td>2024.3–至今</td>
+        <td>月流水过亿稳定运营；印度成第一大下载市场；<br>月均下载779万；MAU 5,544万</td>
+        <td>2.65亿</td>
+        <td>均值$1.19亿<br>峰值$1.40亿</td>
+        <td>55.8%</td>
+        <td>流水+债股融资$25亿(2025Q3)</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="strategy-block">
+    <p><strong>发行阶段策略总结</strong>：Royal Match 采取了 All-in 式买量策略，将全部融资和流水收入持续投入到用户获取中，前期每一轮扩量都依托融资节点的资金支持——种子轮$750万支撑测试期小规模验证，A轮$5,000万+B轮$1.55亿支撑全球上线首年2亿美元的买量投入。</p>
+    <p><strong>爆发期并非简单"砸钱"</strong>：上线近两年后才进行爆发式投入，核心驱动力并非资金堆砌，而是2023年2月"超级光球"（连胜奖励机制）迭代上线带来的收入大幅拉升——月流水从$5,000万级跳升至破亿，高LTV的底气使其能够承受更高的CPI、进行更大规模、更广量级的全渠道获客投放。爆发期年买量投入达8亿美元，资金来源已从融资驱动转为收入自持+C轮$2.55亿补充。</p>
+    <p><strong>买量投入量级</strong>：首年（上升期）~2亿美元 → 爆发期年化~8亿美元。持续"将每一分钱都花在获客上"的极致策略，高投入买量叠加长回本周期，系统性阻断了其他竞品的获客空间——后来者需要同时具备高LTV产品力和充足资金储备才能在同一赛道竞争。</p>
+  </div>
+
+  <h4>2. 出价策略</h4>
+  <div class="strategy-block">
+    <p>Royal Match 的出价策略本质是"降维打击"——凭借品类最高的 RPD（成熟市场双平台 $28.80），其可承受的 CPI 远超竞品出价能力，形成系统性的竞价压制。只要 CAC &lt; LTV，就可无限放大预算。其投放覆盖尽可能多的渠道和国家，不设地理和渠道上限。</p>
+    <p><strong>出价区间</strong>：上线初期 $7–12，稳定期 $2–5。稳定期随着向印度等低CPI区域扩量+自然量提升带动（从20%提升至42.6%），CPI逐步降低，验证了"先All-in买量建规模→规模带来品牌认知→品牌带来自然下载→混合CPI下降→利润提升"的路径。</p>
+    <div class="sb-metric">
+      <div class="m-item"><div class="m-val">$35.80</div><div class="m-lab">RPD · 成熟市场iOS（2026.7）</div></div>
+      <div class="m-item"><div class="m-val">$28.80</div><div class="m-lab">RPD · 成熟市场双平台（2026.7）</div></div>
+      <div class="m-item"><div class="m-val">$11.82</div><div class="m-lab">RPD · 全球双平台（2026.7）</div></div>
+      <div class="m-item"><div class="m-val">$7–12→$2–5</div><div class="m-lab">CPI（初期→稳定期）</div></div>
+    </div>
+  </div>
+
+  <h4>3. 分国家铺量策略</h4>
+  <div class="strategy-block">
+    <p>Royal Match 的国家铺量策略呈现出清晰的扩张路径：从测试期的3国验证（英国52.9%/土耳其27.9%/加拿大13.3%），到上升期以北美为核心（美国25.4%）辐射欧洲、日韩成熟市场，再到爆发期全球铺开（印度跃升至11.2%），最终在稳定运营期形成"印度获量、美国变现"的双轮格局。</p>
+    <p><strong>关键转变</strong>：印度从平稳期的6.6%快速跃升至稳定运营期的13.6%成为第一大下载市场。这反映了Dream Games在确认LTV模型稳定后，主动向低CPI高量级市场扩张——印度的CPI可能仅为美国的1/5–1/10，但凭借极高的留存率（D30 19.9%），即便ARPDAU较低，长线LTV仍为正。美国始终保持收入第一（53%–64%），说明"在印度获量、在美国变现"的策略是有效的。</p>
+    <table>
+      <thead><tr><th>阶段</th><th>Top 1</th><th>Top 2</th><th>Top 3</th><th>Top 4</th><th>Top 5</th><th>策略特征</th></tr></thead>
+      <tbody>
+        <tr><td><span class="stage-badge sb-teal">测试期</span></td><td>英国 52.9%</td><td>土耳其 27.9%</td><td>加拿大 13.3%</td><td>美国 5.7%</td><td>—</td><td>本土(TR)+英语成熟市场验证</td></tr>
+        <tr><td><span class="stage-badge sb-red">上升期</span></td><td>美国 25.4%</td><td>俄罗斯 7.6%</td><td>德国 6.0%</td><td>日本 4.2%</td><td>英国 4.2%</td><td>北美核心+欧洲日韩高ARPU</td></tr>
+        <tr><td><span class="stage-badge sb-blue">平稳期</span></td><td>美国 20.2%</td><td>俄罗斯 9.4%</td><td>巴西 7.0%</td><td>印度 6.6%</td><td>土耳其 4.5%</td><td>开始向新兴市场渗透</td></tr>
+        <tr><td><span class="stage-badge sb-red">爆发期</span><br></td><td>美国 15.7%</td><td>印度 11.2%</td><td>俄罗斯 7.7%</td><td>巴西 6.4%</td><td>土耳其 3.8%</td><td>全球铺开，印度跃升</td></tr>
+        <tr><td><span class="stage-badge sb-green">稳定运营期</span><br></td><td><strong>印度 13.6%</strong></td><td>美国 11.4%</td><td>巴西 4.4%</td><td>印尼 4.0%</td><td>俄罗斯 3.7%</td><td>印度超越美国成下载第一</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px"><strong>买量投放侧对照</strong>：美国(7.85%)&gt;日本(5.71%)&gt;英国(4.81%)&gt;印度(4.75%)&gt;德国(4.57%)&gt;韩国(4.27%)——投放高度分散在全球多国，单一国家不超过8%，体现"全渠道全地区铺量"策略。</p>
+    <p><strong>收入侧对照</strong>：美国始终是第一大收入市场（上升期63.7%→稳定运营期53.0%），日本(6.9%)、德国(5.8%)、韩国(4.8%)、英国(4.7%)为核心变现国。"低CPI国家获量+高ARPU国家变现"的双轮结构是Royal Match利润率持续走高的关键。</p>
+  </div>
+
+  <h4>4. 渠道策略</h4>
+  <div class="strategy-block">
+    <p>Royal Match主投游戏内广告网络（Unity Ads + AdMob + AppLovin + Vungle + Mintegral），主要从其他游戏的激励视频/插屏广告中获取，精准定位"正在玩游戏的用户"，这些用户已证明有游戏习惯，转化后留存天然更高。</p>
+    <p><mark style="background:#fef08a;padding:0 2px;border-radius:2px;">Meta系（Facebook / Meta Audience Network / Instagram / Messenger / Threads）以39.29%居首，AppLovin 19.92%、Google AdMob 11.54%紧随其后</mark>；Unity Ads依托休闲玩家和激励视频流量形成规模化获客，Vungle+Mintegral与ironSource则承担游戏内广告网络补量。</p>
+    <table>
+      <thead><tr><th>渠道</th><th>广大大广告投放占比</th><th>角色与逻辑</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Meta系（Facebook / Meta Audience Network / Instagram / Messenger / Threads）</strong></td><td><strong>39.29%</strong></td><td><strong>绝对主力</strong>；覆盖信息流、应用内网络、图片社交与IM场景<br>（Facebook 9.87% / Meta Audience Network 10.13% / Instagram 9.50% / Messenger 7.97% / Threads 1.82%）</td></tr>
+        <tr><td><strong>AppLovin</strong></td><td>19.92%</td><td><strong>主力渠道</strong>，iOS高LTV用户核心获客，AXON算法精准匹配、长线回收好</td></tr>
+        <tr><td><strong>Google AdMob</strong></td><td>11.54%</td><td><strong>主力渠道</strong>，Android规模化获客，生态覆盖最广</td></tr>
+        <tr><td>Unity Ads</td><td>9.66%</td><td><strong>重点渠道</strong>，休闲玩家主阵地，激励视频/可玩广告流量池充足、转化效率高</td></tr>
+        <tr><td>Vungle+Mintegral</td><td>6.49%</td><td><strong>补量渠道</strong>；Vungle 4.49% + Mintegral 2.00%，承接游戏内广告网络补量</td></tr>
+        <tr><td>ironSource</td><td>6.12%</td><td><strong>补量渠道</strong>，游戏内激励视频补量</td></tr>
+        <tr><td>Kwai(快手)</td><td>1.67%</td><td><strong>新兴渠道</strong>，测试新兴市场流量</td></tr>
+        <tr><td>InMobi</td><td>1.39%</td><td><strong>补量渠道</strong>，移动广告网络补量</td></tr>
+        <tr><td>YouTube</td><td>1.08%</td><td><strong>视频补量</strong>，兼顾品牌曝光</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>5. 素材策略</h4>
+  <div class="strategy-block">
+    <p>Royal Match的素材体系以"广告即玩法"为核心原则。不同于Playrix的早期的"假广告"，Royal Match的广告中主角通过解决Match-3谜题获救——与核心玩法完全一致。广告中的"拯救国王"场景被直接做成游戏内的King's Nightmare模式，打通了广告与实际体验的壁垒，安装后预期无落差、留存不打折。同时有效打造IP锚点，将"国王"角色IP化，使其成为贯穿所有素材的情感锚点，大幅度降低重复曝光带来的素材衰减。</p>
+    <p><strong>素材量级</strong>：Royal Match全时段累计投放素材约26.4万条。爆发期(2022.9–2023.8)周均在投素材1,184条，稳定运营期周均在投1,034条。新素材产量上，周均新增素材约100条左右，素材极度多样化，但核心创意原型始终围绕"拯救国王"展开。</p>
+    <table>
+      <thead><tr><th>素材类型</th><th>描述</th><th>角色/占比</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mini-game视频（核心）</strong></td><td>"拯救国王"解谜，King Robert陷入危险情境，需要通过三消解谜来救援</td><td>主力素材</td></tr>
+        <tr><td><strong>Fail Ad（失败广告）</strong></td><td>刻意展示玩家在谜题中失败，激发好胜心："我肯定比他玩得好"</td><td>核心转化钩子</td></tr>
+        <tr><td><strong>可玩广告（Playable）</strong></td><td>极简的"匹配彩色方块完成棋盘"交互，越精简表现越好</td><td>预筛选高意向用户</td></tr>
+        <tr><td><strong>明星代言</strong></td><td>Simon Cowell等大牌明星出镜，建立信任感和破圈</td><td>品牌层</td></tr>
+        <tr><td><strong>Gameplay实录</strong></td><td>展示真实三消玩法画面</td><td>占比较少，前期为主</td></tr>
+        <tr><td><strong>真人UGC型</strong></td><td>女性玩家在卧室/车内/公园场景推荐，主打女性用户，营造"闺蜜推荐"的信任感</td><td>占比较少</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px"><strong>分阶段素材投放量（<span class="v7upd">广大大</span>）</strong>：</p>
+    <table>
+      <thead><tr><th>阶段</th><th>月均广告</th><th>峰值月</th><th>周均素材</th></tr></thead>
+      <tbody>
+        <tr><td>上升期</td><td>1,415</td><td>1,660</td><td>498</td></tr>
+        <tr><td>平稳期</td><td>2,732</td><td>5,701</td><td>828</td></tr>
+        <tr><td>爆发期</td><td><strong>3,962</strong></td><td><strong>6,412</strong></td><td>1,184</td></tr>
+        <tr><td>稳定运营期</td><td>5,073</td><td>19,270</td><td>1,034</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:16px;padding:14px 18px;background:var(--blue-lt,#eff6ff);border-left:3px solid var(--blue,#2563eb);border-radius:6px;">
+      <p style="margin:0 0 8px;font-weight:700;color:var(--blue,#2563eb);">素材策略启发总结</p>
+      <p style="margin:0 0 6px;"><strong>1. 长线运营的素材工业化</strong>：Royal Match建立了高效的"素材生产→测试→迭代"体系，通过海量A/B测试持续筛选高转化素材，而非依赖单条爆款。周新增素材约100条左右，超过行业竞品，意味着素材团队的工业化能力本身构成了竞争壁垒。</p>
+      <p style="margin:0 0 6px;"><strong>2. 更注重情绪调用而非玩法差异</strong>：Royal Match的素材核心不是展示"我的三消和别人有什么不同"，而是通过情绪钩子驱动转化——解救国王的剧情化动画制造紧迫感、Fail Ad的失败情绪反转激发好胜心、真人UGC的安利营造信任感。情绪共鸣远比玩法差异化更能驱动大众用户的安装决策。</p>
+      <p style="margin:0;"><strong>3. 素材制作成本和精良程度更高</strong>：相较于品类其他产品的截图拼接或简单录屏，Royal Match的核心素材以3D动画短片为主，制作精度接近游戏CG水准，单条素材成本远高于行业均值，但高质量素材的生命周期更长、转化率更高，整体ROI反而更优。</p>
+    </div>
+  </div>
+
+  <h4>6. 关键成功要素（KSF）</h4>
+  <div class="ksf-grid">
+    <div class="ksf-card"><div class="kc-num">KSF 01</div><div class="kc-title">产品力驱动的高出价能力</div><div class="kc-metrics"><span>D30 20.7%</span><span>D180 9.4%</span><span>成熟市场RPD $28.80</span><span>CPI $7–12</span></div><div class="kc-desc">高留存与高LTV共同构成出价碾压的根本前提，使其在广告竞价中具备结构性成本优势。<br>• 引擎算法能力+关卡设计调优与手感打磨+零广告用户体验不被打断→极致用户体验→留存更高→LTV更长<br>• 高频LiveOps→付费频率↑<br>• Super Light Ball连胜机制→收入基线×1.5<br>• Royal Pass月通行证→稳定MRR<br>• 收藏系统→付费深度↑</div></div>
+    <div class="ksf-card"><div class="kc-num">KSF 02</div><div class="kc-title">充足资本+超长回本容忍</div><div class="kc-metrics"><span>30亿美元融资</span><span>首年UA $2亿</span><span>爆发期单年UA $8亿</span><span>回本周期2年+</span></div><div class="kc-desc">品类买量投入规模最大的产品之一，回收周期容忍度远超行业均值。充足的资本储备使其能在冷启动阶段承受长期负ROI，等待飞轮效应显现——多数竞品在资金耗尽前已被迫退出。</div></div>
+    <div class="ksf-card"><div class="kc-num">KSF 03</div><div class="kc-title">持续A/B测试优化LTV</div><div class="kc-metrics"><span>每年60次 A/B Tests</span></div><div class="kc-desc">高频产品测试覆盖关卡难度曲线、付费点位、LiveOps节奏、Meta层等全链路。每次迭代在LTV上叠加边际增量，累积形成难以逾越的复合壁垒。</div></div>
+    <div class="ksf-card"><div class="kc-num">KSF 04</div><div class="kc-title">买量投放效率与素材工业化</div><div class="kc-metrics"><span>7人投放团队</span><span>周素材产量~100条</span></div><div class="kc-desc">• 融资→买量→变现→再买量的资金滚动效率极高<br>• 7人投放团队管理品类最大规模UA预算，人效比远超行业水平，高度依赖算法自动化投放<br>• 素材工厂+数据驱动投放：海量素材流水线持续产出和测试不同创意类型、卖点角度与人群组合，数据驱动筛选最优解后规模化放量</div></div>
+    <div class="ksf-card"><div class="kc-num">KSF 05</div><div class="kc-title">土耳其老兵团队的经验积累</div><div class="kc-desc">核心团队出自Peak Games，具备三消引擎算法、关卡数值设计、UA投放、数据科学及资本运作的完整能力栈。</div></div>
+  </div>
+</section>
+
+<!-- 2.2 Royal Kingdom -->
+<section id="p2-2">
+  <h3 id="p2-2">2.2 Royal Kingdom——大资本碾压的完美复制</h3>
+  <p>Royal Kingdom 是 Dream Games 对 Royal Match 方法论的系统性复制与升级。截至2026年6月，RK 累计下载1.45亿、累计收入$5.65亿、MAU峰值3,109万。值得注意的是，RK 在放量后留存不降反升，这与 RM 当年的放量路径形成了关键差异——说明 Dream Games 已将"产品迭代与放量同步"内化为方法论。</p>
+
+  <div class="chart-box">
+    <div class="cb-title">Royal Kingdom 发行阶段：月下载量 vs 广告投放量（2023.04–2026.06）</div>
+    <div class="cb-sub">数据来源：Sensor Tower + 广大大 ｜ 柱状图=月下载（万） ｜ 折线=月广告数 ｜ 背景色=阶段划分</div>
+    <div class="chart-canvas-wrap phase-chart-wrap"><canvas id="chartRKPhase" width="1237" height="720" style="display: block; box-sizing: border-box; height: 360px; width: 618px;"></canvas></div>
+    <div class="chart-annotations">
+      <span class="ann-item" style="background:rgba(124,58,237,.1);color:#7c3aed">● 测试期 2023.4–2024.10</span>
+      <span class="ann-item" style="background:rgba(37,99,235,.1);color:#2563eb">● 起步期 2024.11–2025.3</span>
+      <span class="ann-item" style="background:rgba(220,38,38,.1);color:#dc2626">● 大推期（成熟市场） 2025.4–2025.12</span>
+      <span class="ann-item" style="background:rgba(5,150,105,.1);color:#059669">● 大推期（新兴市场扩量） 2026.1–至今</span>
+    </div>
+  </div>
+
+  <h4>1. 发行阶段策略</h4>
+  <table>
+    <thead><tr><th>阶段</th><th>时间</th><th>关键动作</th><th>阶段下载</th><th>月流水</th><th>月均下载</th><th>付费获客占比</th><th>资金来源</th><th>RPD（阶段内）</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="stage-badge sb-purple">测试期</span></td>
+        <td>2023.04–2024.10</td>
+        <td>英国+加拿大+菲律宾软启动18个月；<br>经历V1（PvP+社交赌场）→V2（回归传统三消）大改版；2024.04起新版本上线、开始第二次软启动，新增澳大利亚验证</td>
+        <td>552万</td>
+        <td>$72万</td>
+        <td>29万</td>
+        <td>67%</td>
+        <td>RM流水+已有融资</td>
+        <td>全球$2.68<br>成熟$3.65</td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-blue">起步期</span></td>
+        <td>2024.11–2025.03</td>
+        <td>2024.11.21全球正式发布；加大美国等T1市场投放，积累和验证数据、为大推做准备；<br><span class="v7upd">月广告数从约千条水平快速爬升</span>；MAU从339万→456万</td>
+        <td>1,090万</td>
+        <td>$739万</td>
+        <td>218万</td>
+        <td>60%</td>
+        <td>黑石$25亿债股融资</td>
+        <td>全球$3.13<br>成熟$4.63</td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-red">大推期（成熟市场）</span></td>
+        <td>2025.04–2025.12</td>
+        <td>集中美国、西欧、日韩、澳大利亚和加拿大等高ARPU市场大规模放量，验证高价值用户的长线回收；<span class="v7upd">月均广告约5,362条，阶段峰值6,578条</span>；<br>MAU从662万升至2,000万量级，月流水从$1,178万升至$3,500万+</td>
+        <td><strong>7,388万</strong></td>
+        <td><strong>约$3,180万</strong></td>
+        <td><strong>821万</strong></td>
+        <td>74%–75%</td>
+        <td>黑石融资+RM流水</td>
+        <td>全球$3.29→$4.07<br>成熟$5.80→$9.37</td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-green">大推期（新兴市场扩量）</span></td>
+        <td>2026.01–至今</td>
+        <td>在美国等成熟市场稳定变现的基础上，向印度、巴西、墨西哥等新兴市场扩量；<span class="v7upd">月均广告约11,252条，2026年5月峰值约1.92万条</span>；<br>MAU峰值<strong>3,109万</strong>，月流水稳定在$3,500–4,100万</td>
+        <td><strong>5,445万</strong></td>
+        <td><strong>约$3,800万</strong></td>
+        <td>907万</td>
+        <td>75%</td>
+        <td>流水自持</td>
+        <td>全球$4.07<br>成熟$9.37</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="strategy-block">
+    <p><strong>发行阶段策略总结</strong>：Royal Kingdom 的发行节奏可概括为"18个月测试+5个月起步+9个月成熟市场大推+2026年起新兴市场扩量"：</p>
+    <p><strong>① 长达18个月的Soft Launch周期，产品方向经历了充分验证和大改。</strong>从V1（PvP+社交赌场）到V2（回归传统三消）的重大方向调整，在英国+加拿大+菲律宾充分验证留存模型后才推向全球。这是Dream Games一贯的产品打磨逻辑——Royal Match同样经历了一年的软启动才开始大推。</p>
+    <p><strong>② 进入起步期后，在美国等T1市场投放积累和验证数据，同时进行融资准备大推。</strong>2024.11全球发布后月均下载从29万跃升至218万（×7.5倍），但广告投放量仍克制（<span class="v7upd">月均广告数约千条</span>），核心目标是在美国市场验证ROI模型和回本曲线。2025年初完成$25亿黑石融资后，4月即启动大推。</p>
+    <p><strong>③ 爆发更快，并呈现“先成熟市场验证回收、再向新兴市场扩量”的两段式大推。</strong>RK全球发布后第5个月（2025.04）即进入成熟市场大推，对比RM全球发布后花了约2年才进入爆发期（2021.03发布→2023.02爆发）；2026年1月起进一步向印度、巴西、墨西哥等新兴市场扩量。RM已验证的素材方向、渠道组合与出价策略大幅压缩了RK的冷启动探索期。</p>
+  </div>
+
+  <h4>2. 产品方向调整</h4>
+  <div class="strategy-block">
+    <p>Royal Kingdom 测试期（2023.04–2024.10）经历了一次彻底的产品方向调整，从V1（PVP+社交赌场）转向V2（传统三消路线）。<a href="https://mp.weixin.qq.com/s/UMDRzmjoUXRMRl6HCvZJcw" target="_blank">参考阅读：测试期方向改动详情 ↗</a></p>
+
+    <table>
+      <thead><tr><th>维度</th><th>V1 版本（2023.04–2024.03）</th><th>V2 版本（2024.04起）</th></tr></thead>
+      <tbody>
+        <tr><td><strong>核心方向</strong></td><td>PvP+社交赌场经济+三消关卡混合</td><td>回归传统关卡制三消（Royal Match 2.0进阶版）</td></tr>
+        <tr><td><strong>商业化模型</strong></td><td>赌场经济倍数机制：消费与游戏时间脱钩，短时间可大额付费</td><td>"+5步骤"关卡制模式：通过难度设计驱动付费</td></tr>
+        <tr><td><strong>ARPDAU</strong></td><td>$0.210</td><td>$0.110</td></tr>
+        <tr><td><strong>下载→DAU转化率</strong></td><td>6.6%（主要吸引RM核心用户，受众较窄）</td><td><strong>16%</strong>（触达更广泛休闲用户，受众大幅拓宽）</td></tr>
+        <tr><td><strong>关键问题</strong></td><td>三消框架缝合"PvP+社交赌场"落地难度超预期，<br>用户体验构建未达理想水平</td><td>与RM相似度高，存在内部竞争风险</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>2.1 V1立项的原始定位——与Royal Match拉开差异化</strong>：</p>
+    <ul>
+      <li><strong>目标用户差异化</strong>：Royal Kingdom 定位吸引更偏男性和中度玩家——难度曲线更加陡峭，同时加入RPG环节、异步PvP机制，希望吸引更多中度玩家和男性用户；同时题材上，星球王国的开拓与修复世界观、中世纪奇幻风格更符合男性审美。</li>
+      <li><strong>商业化模式差异化</strong>：希望融合社交赌场机制拉高ARPU，走重度IAP路线——对标Coin Master / Monopoly GO! / Solitaire Grand Harvest的赌场经济倍数模型，实现消费与游戏时间脱钩、短时间大额付费。</li>
+    </ul>
+
+    <p><strong>2.2 方向调整的决策逻辑</strong>：</p>
+    <ul>
+      <li><strong>V1的扩量困境</strong>：虽然ARPDAU更高（$0.210 vs $0.110），但下载→DAU转化率仅6.6%，意味着绝大部分获客成本被浪费，扩盘难度制约了整体收入规模上限。V2版本以更低的ARPDAU换取了2.4倍的用户留存率（16% vs 6.6%），整体DAU池子显著扩大。Dream Games选择了"做大分母"的策略——先用高转化率获取海量用户，再通过持续LiveOps逐步提升LTV。</li>
+      <li><strong>Royal Match的信号验证</strong>：2023年6月Royal Match推出"超级光球"功能后RPD冲至$32，与社交赌场类LTV差距缩小，证明了传统关卡制三消通过LiveOps创新同样能实现极高用户LTV，且无需承担三消和社交赌场模式融合不佳而带来的高流失问题。</li>
+    </ul>
+
+    <p><strong>2.3 V2调整后的产品差异化</strong>：RK在回归传统三消框架后仍做了差异化设计：</p>
+    <ul>
+      <li>每10关嵌入2个PvE"Dark King"关卡，难度曲线明显上升，促使付费转化</li>
+      <li>活动代币奖励更慷慨，将注意力从单纯通关转向活动参与</li>
+      <li>Trophy Room奖杯陈列室系统增强社交竞争性</li>
+      <li>消除连锁反应加速+关卡过渡缩短，提升游戏节奏感</li>
+      <li>世界观差异化：国王Richard的星球探索（冰雪/沙漠/雨林主题），美术风格偏男性向</li>
+    </ul>
+
+    <p><strong>2.4 但两款产品最终比预期更加相似</strong>：PvP+社交赌场路线未能跑通，导致RK回归传统三消后与RM在玩法、目标受众和市场定位上的重叠度显著提高。这一结果带来两个影响：</p>
+    <ul>
+      <li><strong>内部用户侵蚀风险</strong>：两款产品的高相似性使得在买量过程中，RK可能对Dream Games现有RM用户群造成一定程度的侵蚀。</li>
+      <li><strong>买量复用与接力策略</strong>：正因产品同质性高，Dream Games得以在买量策略上呈现很强的复用和接力——RM验证过的素材方向、渠道组合、出价策略可直接平移至RK。</li>
+    </ul>
+
+    <div class="note">
+      <strong>对国内出海团队的启示</strong>：Dream Games用18个月和一次失败验证了一个关键结论——在三消框架内融合社交赌场/PvP经济的落地难度远超预期。"大富翁/赌场+三消"这条差异化路径目前尚未跑通。传统关卡制三消通过LiveOps创新（如超级光球类机制）同样可达到极高LTV水平。
+    </div>
+  </div>
+
+  <h4>3. 出价策略</h4>
+  <div class="chart-box">
+    <div class="cb-title">Dream Games 预算接力：<span class="v7upd">Royal Match vs Royal Kingdom 月广告投放量对比（2023.01–2026.06）</span></div>
+    <div class="cb-sub">数据来源：广大大 ｜ <span class="v7upd">两款产品分阶段错峰放量、轮动冲高，降低同集团产品在同一时间窗口的内部竞价</span></div>
+    <div class="chart-canvas-wrap"><canvas id="chartRMRK_AdRelay" width="1237" height="720" style="display: block; box-sizing: border-box; height: 360px; width: 618px;"></canvas></div>
+  </div>
+  <div class="strategy-block">
+    <p><strong>① 预算接力策略</strong>：两款产品在投放节奏上刻意错开，避免相似定位的产品在同一时间窗口竞价同一批用户、造成内部抢量。<span class="v7upd">如上图所示，RK在2024年11月全球发布后逐步起量，2026年4–5月升至约1.60万–1.92万条时，RM同期约0.81万条；2026年6月RM再冲至约1.93万条、RK回落至约1.17万条，呈现分阶段轮动冲高的预算接力。</span></p>
+    <p><strong>② 复用RM已验证的商业化体系、出价能力潜在对标RM，仍有放量空间</strong>：RK的LTV模型直接继承RM的付费设计框架（+5步骤关卡制、LiveOps活动体系、Royal Pass月卡）。当前全球双平台RPD $4，对比 RM RPD $11.82 仍有显著差距，但RK仍处于高速增长阶段（RPD环比+24%/+62%），用户LTV尚未充分释放。随着关卡深度增加和LiveOps持续叠加，RK的长线回收潜力仍在兑现中。</p>
+    <p><strong>③ 买量力度明显更克制</strong>：Royal Kingdom 峰值展示份额SOV仅为0.3%（约为RM峰值的30%），但获取的用户增长效率并不逊色——RM品牌光环+交叉推广降低了获客成本。RK无需从零建立用户心智，直接复用RM在全球数十亿次广告曝光中积累的品牌认知，大幅降低了新用户的决策门槛。</p>
+    <div class="sb-metric">
+      <div class="m-item"><div class="m-val">$4.07</div><div class="m-lab">大推期（新兴市场扩量）全球双平台RPD</div></div>
+      <div class="m-item"><div class="m-val">$9.37</div><div class="m-lab">大推期（新兴市场扩量）成熟市场双平台RPD</div></div>
+      <div class="m-item"><div class="m-val">$12.11</div><div class="m-lab">大推期（新兴市场扩量）成熟市场iOS端RPD</div></div>
+      <div class="m-item"><div class="m-val">0.3%</div><div class="m-lab">峰值SOV（RM峰值的30%）</div></div>
+    </div>
+  </div>
+
+  <h4>4. 分国家铺量策略</h4>
+  <div class="strategy-block">
+    <p>Royal Kingdom 的国家铺量策略整体继承 RM 路径，但节奏更紧凑、美国集中度更高：从测试期的英语系3国验证（英国53%/加拿大20%/菲律宾23%测低成本留存），到全球发布后美国迅速成为第一大收入与下载市场；2025年4–12月先在美国、西欧、日韩、澳大利亚和加拿大等成熟市场集中大推，2026年1月起再向印度、巴西、墨西哥等新兴市场扩量，形成“成熟市场验证回收 + 新兴市场获取增量”的两段式放量路径。</p>
+    <p><strong>与RM的策略差异</strong>：RK 的大推期（成熟市场）优先验证高ARPU的T1市场回收效率；进入大推期（新兴市场扩量）后，新兴市场（印度8.6%/巴西8.5%/墨西哥5.6%）进入下载Top5。策略上RK更侧重巴西、墨西哥等拉美市场，减少在印度与RM直接抢量。</p>
+    <table>
+      <thead><tr><th>阶段</th><th>收入Top5国家</th><th>下载Top5国家</th><th>策略特征</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="stage-badge sb-purple">测试期</span></td>
+          <td>英国76.2%、加拿大22.3%、澳大利亚10.8%</td>
+          <td>英国53%、菲律宾23%、加拿大20%</td>
+          <td>高LTV市场验证收入模型 + 低成本市场测留存；后期新增澳大利亚</td>
+        </tr>
+        <tr>
+          <td><span class="stage-badge sb-blue">起步期</span></td>
+          <td><strong>美国48%</strong>、英国22.5%、澳大利亚11.5%</td>
+          <td><strong>美国25.9%</strong>、墨西哥6.8%、巴西6.6%</td>
+          <td>全球发布后美国迅速成为第一大收入市场</td>
+        </tr>
+        <tr>
+          <td><span class="stage-badge sb-red">大推期（成熟市场）</span></td>
+          <td><strong>美国68.4%</strong>、英国7.9%、日本3%、澳大利亚3%</td>
+          <td><strong>美国23.9%</strong>、印度7.2%、墨西哥5.6%、巴西5.5%</td>
+          <td>美国成核心收入市场；成熟市场集中验证回收</td>
+        </tr>
+        <tr>
+          <td><span class="stage-badge sb-green">大推期（新兴市场扩量）</span></td>
+          <td>美国57.2%、日本5.7%、英国5.5%、德国4%、韩国3.8%</td>
+          <td>美国12.5%、印度8.6%、巴西8.5%、墨西哥5.6%</td>
+          <td>成熟市场稳定变现；印度、巴西、墨西哥等新兴市场扩量</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px"><strong>买量投放侧对照</strong>：RK投放集中度高于RM——美国(15.09%)>英国(5.47%)>德国(4.57%)>法国(4.37%)>日本(3.93%)，Top5国家合计33.4%，对比RM的Top5合计27.2%更为集中，体现RK在成熟市场聚焦投放的策略取向。</p>
+  </div>
+
+  <h4>5. 渠道策略</h4>
+  <div class="strategy-block">
+    <p>RK 与 RM 同属 Dream Games，渠道打法同源但更偏向游戏内广告网络。<mark style="background:#fef08a;padding:0 2px;border-radius:2px;">RK 的 AppLovin 33.14%显著高于RM的19.92%，Unity Ads 15.95%约为RM的1.7倍；Meta系则为22.87%，低于RM的39.29%。其中RK的Instagram为5.92%、Facebook为5.90%，RM对应为9.50%和9.87%。Kwai方面，RK 6.49%约为RM 1.67%的4倍，体现其对新兴流量更积极的探索。</mark></p>
+    <table>
+      <thead><tr><th>渠道</th><th>广大大投放占比(RK)</th><th>广大大投放占比(RM)</th><th>差异逻辑</th></tr></thead>
+      <tbody>
+        <tr><td><strong>AppLovin</strong></td><td><strong>33.14%</strong></td><td>19.92%</td><td><mark style="background:#fef08a;padding:0 2px;border-radius:2px;"><strong>绝对主力</strong>，RK游戏内网络主导程度更高，占比约RM 1.7倍</mark></td></tr>
+        <tr><td><strong>Meta系（Facebook / Meta Audience Network / Instagram / Messenger / Threads）</strong></td><td><strong>22.87%</strong></td><td><strong>39.29%</strong></td><td><mark style="background:#fef08a;padding:0 2px;border-radius:2px;"><strong>社交与应用内网络合流</strong>；RK较RM明显收敛，降低社交泛用户内部竞争<br>（RK：Facebook 5.90% / Meta Audience Network 4.84% / Instagram 5.92% / Messenger 5.36% / Threads 0.85%<br>RM：Facebook 9.87% / Meta Audience Network 10.13% / Instagram 9.50% / Messenger 7.97% / Threads 1.82%）</mark></td></tr>
+        <tr><td><strong>Unity Ads</strong></td><td><strong>15.95%</strong></td><td>9.66%</td><td><mark style="background:#fef08a;padding:0 2px;border-radius:2px;"><strong>主力渠道</strong>，RK对休闲激励流量倚重更深，约RM 1.7倍</mark></td></tr>
+        <tr><td>Google AdMob</td><td>8.23%</td><td>11.54%</td><td><mark style="background:#fef08a;padding:0 2px;border-radius:2px;"><strong>重点渠道</strong>，RK略低于RM，Android铺量为辅</mark></td></tr>
+        <tr><td>ironSource</td><td>7.08%</td><td>6.12%</td><td><mark style="background:#fef08a;padding:0 2px;border-radius:2px;"><strong>补量渠道</strong>，两者接近，承接激励视频补量</mark></td></tr>
+        <tr><td><strong>Kwai(快手)</strong></td><td><strong>6.49%</strong></td><td>1.67%</td><td><mark style="background:#fef08a;padding:0 2px;border-radius:2px;"><strong>新兴渠道</strong>，RK约为RM 4倍，探索更积极</mark></td></tr>
+        <tr><td>Vungle+Mintegral</td><td>2.81%</td><td>6.49%</td><td><mark style="background:#fef08a;padding:0 2px;border-radius:2px;"><strong>游戏内网络补量</strong>；RK：Vungle 1.90% + Mintegral 0.90%；RM：Vungle 4.49% + Mintegral 2.00%</mark></td></tr>
+        <tr><td>YouTube</td><td>1.22%</td><td>1.08%</td><td><mark style="background:#fef08a;padding:0 2px;border-radius:2px;"><strong>视频补量</strong>，两者占比接近</mark></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>6. 素材策略</h4>
+  <div class="strategy-block">
+    <p><strong>素材量级</strong>：RK全时段累计投放素材约4.02万条、广告11.57万条。大推期（成熟市场）月均广告约5,362条；大推期（新兴市场扩量）月均广告约11,252条，2026年5月峰值19,169条。素材产量级约为RM的40%（RM周均素材~1,000条），且从测试期的周均47条提升至新兴市场扩量阶段约441条（×9.4倍）。</p>
+    <p><strong>素材策略核心</strong>：RK在素材打法上高度延续Royal Match，大量进行素材复用。RM的素材结构是标准的三段式拼Gameplay——"突进开头+受难国王遇险+问题解决+故意失败"，偶尔在开头加2D→3D切换增加新鲜感。RK的素材套路与RM几乎一模一样，甚至部分素材直接做了国王人物模型的替换、换了结尾Download页游戏名就直接开投，重合度极高。</p>
+    <p><strong>三大高频素材类型</strong>：① <strong>副玩法（Mini-game）买量</strong>——王国建设+三消解谜+Pin Pull等小游戏场景，延续RM"广告即玩法"框架，是投放量最大的素材类型；② <strong>真人UGC广告</strong>——素人/KOL出镜真实体验游戏，营造口碑传播感；③ <strong>明星/网红广告</strong>——高举高打的品牌型素材，通过明星代言造势的同时产出高质量创意素材。</p>
+    <p><strong>明星代言高举高打</strong>：Dream Games延续了RM时期的明星合作策略并加大投入——勒布朗·詹姆斯代言广告费约$400万，吉米·法伦（Tonight Show主持人）、夏奇拉等明星合作费用至少$100万起，此外还有大量头部KOL合作，其中不少费用超过$50万。明星素材兼具品牌造势和高质量创意产出双重目的，是RK在大推期（成熟市场）实现快速破圈的关键手段。</p>
+    <table>
+      <thead><tr><th>素材类型</th><th>描述</th><th>角色/占比</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Mini-game/副玩法视频（核心）</strong></td><td>王国建设+三消解谜+Pin Pull等小游戏场景，延续RM"广告即玩法"框架</td><td>主力素材，量最大</td></tr>
+        <tr><td><strong>真人UGC广告</strong></td><td>素人/KOL出镜真实体验游戏画面，营造口碑传播感和真实性</td><td>高频素材类型</td></tr>
+        <tr><td><strong>明星代言广告</strong></td><td>詹姆斯($400万)、吉米·法伦、夏奇拉($100万+)等明星出镜，高制作品质</td><td>品牌造势+破圈</td></tr>
+        <tr><td><strong>Fail Ad（失败广告）</strong></td><td>展示失败场景激发好胜心，与RM方法论一致</td><td>核心转化钩子</td></tr>
+        <tr><td><strong>可玩广告（Playable）</strong></td><td>简化三消交互体验，预筛选高意向用户</td><td>预筛选</td></tr>
+        <tr><td><strong>RM交叉推广</strong></td><td>借助RM品牌认知导流，降低获客成本</td><td>差异化优势</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px"><strong>分阶段素材投放量（<span class="v7upd">广大大</span>）</strong></p>
+    <table>
+      <thead><tr><th>阶段</th><th>月均广告</th><th>峰值月</th><th>周均素材</th></tr></thead>
+      <tbody>
+        <tr><td>测试期</td><td>711</td><td>2,147</td><td>47</td></tr>
+        <tr><td>起步期</td><td>1,176</td><td>1,511</td><td>160</td></tr>
+        <tr><td>大推期（成熟市场）</td><td><strong>5,362</strong></td><td><strong>6,578</strong></td><td><strong>约485</strong></td></tr>
+        <tr><td>大推期（新兴市场扩量）</td><td><strong>11,252</strong></td><td><strong>19,169</strong></td><td>约441</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>7. 关键成功要素（KSF）</h4>
+  <div class="ksf-grid">
+    <div class="ksf-card"><div class="kc-num">KSF 01</div><div class="kc-title">RM买量模型与数据积累</div><div class="kc-desc">Royal Match 3年投放沉淀的买量模型、素材方向、渠道组合、出价策略可直接复用至RK，大幅压缩冷启动探索期，做到比RM更快起量</div></div>
+    <div class="ksf-card"><div class="kc-num">KSF 02</div><div class="kc-title">RM品牌光环降低获客成本</div><div class="kc-desc">交叉推广+品牌认知迁移，不必从零建立用户心智，同等SOV下获取的用户量级更大，峰值SOV仅为RM的30%但增长效率不逊色</div></div>
+    <div class="ksf-card"><div class="kc-num">KSF 03</div><div class="kc-title">18个月测试期充分验证</div><div class="kc-desc">数据为先——英国+加拿大测试期D1&gt;45%、D30&gt;10%后才全球发布，经历V1→V2方向大改仍坚持产品优先，确保留存数据达标后再放量</div></div>
+    <div class="ksf-card"><div class="kc-num">KSF 04</div><div class="kc-title">充足资本支撑快速放量</div><div class="kc-desc">黑石$25亿债股融资提供充足弹药，经验证的买量模型+打磨成熟的产品+充裕资本三重叠加，使RK能够在验证后迅速放量，半年即达到RM用2年才达到的月下载规模</div></div>
+  </div>
+</section>
+
+<!-- 2.3 Match Villains -->
+<section id="p2-3">
+  <h3 id="p2-3">2.3 Match Villains——资本催熟的教训与"先验证后放量"的败局</h3>
+  <p>Match Villains 由土耳其老牌厂商 Good Job Games 开发（曾凭超休闲矩阵获25亿+下载、Zen Match以1–1.5亿美元出售给Moon Active），是"先验证后放量"路径的教科书案例，也是"产品力不足时资本催熟"的反面教材。从测试期极克制验证到A轮后爆发、再到ROI承压缩量的完整轨迹，揭示了三消红海中大规模买量的结构性困境。产品研发耗时5年，2024.4 iOS软启动、6.13正式上架、11.25完成双平台覆盖，以"反派怪盗"为差异化IP切入，美术品质堪称顶级，但关卡架构的惩罚性设计和过早逼氪摧毁了长线留存根基。</p>
+
+  <div class="chart-box">
+    <div class="cb-title">Match Villains 发行阶段：月下载量 vs 月广告投放量（2024.06–2026.06）</div>
+    <div class="cb-sub">数据来源：Sensor Tower（81国下载）+ 广大大 ｜ 柱状图=月下载（万）｜ 折线=月广告数 ｜ 背景色=阶段划分</div>
+    <div class="chart-canvas-wrap"><canvas id="chartMV" width="1237" height="720" style="display: block; box-sizing: border-box; height: 360px; width: 618px;"></canvas></div>
+    <div class="chart-annotations">
+      <span class="ann-item" style="background:rgba(139,92,246,.1);color:#8b5cf6">● 测试期·极克制验证 2024.04–2024.11</span>
+      <span class="ann-item" style="background:rgba(37,99,235,.1);color:#2563eb">● 起步期·产品就绪 2024.12–2025.06</span>
+      <span class="ann-item" style="background:rgba(220,38,38,.1);color:#dc2626">● 爆发期·A轮后爆发 2025.07–2025.12</span>
+      <span class="ann-item" style="background:rgba(234,88,12,.1);color:#ea580c">● ROI调整期 2026.01–至今</span>
+    </div>
+  </div>
+
+  <h4>1. 发行阶段策略</h4>
+  <table>
+    <thead><tr><th>阶段</th><th>时间</th><th>关键动作</th><th>月均下载</th><th>月均流水</th><th>月均广告数</th><th>MAU</th><th>资金来源</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="stage-badge sb-purple">测试期·极克制验证</span></td>
+        <td>2024.04–2024.11</td>
+        <td>2024.4 iOS软启动，6.13正式上架，11.25 Android版发布；<br>日消耗仅$1–2K，最小成本验证产品力与留存模型</td>
+        <td>2.5万</td>
+        <td>—</td>
+        <td>99</td>
+        <td>1–11万</td>
+        <td>种子轮$2,300万（约25年初完成，25.03宣布）</td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-blue">起步期·产品就绪</span></td>
+        <td>2024.12–2025.06</td>
+        <td>留存大幅改善至D30 8.6%（峰值），确认产品就绪；<br>精准瞄准竞品资深玩家；开始有规模投放</td>
+        <td>37.4万</td>
+        <td>$128万</td>
+        <td>2,315</td>
+        <td>17–129万</td>
+        <td>种子轮余额</td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-red">爆发期·A轮后爆发</span></td>
+        <td>2025.07–2025.12</td>
+        <td>获A轮$6,000万后全力放量；<span class="v7upd">月广告数峰值约2.18万条（2026-05）</span>；<br>副玩法素材（警察捉小偷）爆量吸量</td>
+        <td><strong>218.1万</strong></td>
+        <td><strong>$433万</strong></td>
+        <td><strong>10,542</strong></td>
+        <td>145–780万</td>
+        <td>A轮$6,000万（2025.7.31，合计$8,300万）</td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-gold">ROI调整期</span></td>
+        <td>2026.01–至今</td>
+        <td>ROI承压缩量；退回fake ad策略；<br>推出副玩法衍生产品(Police Escape等)分流获客</td>
+        <td>162.1万</td>
+        <td>$535万</td>
+        <td>12,903</td>
+        <td>903→701万(↓)</td>
+        <td>流水+A轮余额</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="strategy-block">
+    <p><strong>发行阶段策略总结</strong>：Match Villains 的发行节奏可概括为"8个月极低消耗测试（含iOS软启动+Android补齐） + 7个月起步放量 + 6个月A轮后爆发 + ROI调整缩量"。</p>
+    <p><strong>① 测试期纪律性值得肯定</strong>：2024.4 iOS软启动，6.13正式上架，11.25完成双平台覆盖。前8个月日消耗仅$1–2K，月广告不足100条，在确认D30从3.2%逐步改善至8.6%后才启动规模放量。</p>
+    <p><strong>② A轮后放量过于激进</strong>：2025.7.31 A轮$6,000万到账后，<span class="v7upd">月广告数从A轮时的约2,500条持续放大，2026年5月冲高至约2.18万条的峰值</span>，月均下载从37.4万飙升至218.1万（×5.8倍），量级看似可观，但大量新兴市场自然流入用户稀释了整体质量——RPD在放量后反而走平，获客效率急剧恶化。</p>
+    <p><strong>③ 2026年被迫进入调整期</strong>：MAU在2026年1月触顶903万后回落至701万（−22%），但月流水反而稳定在$535万水平（付费率和ARPPU在提升，核心鲸鱼用户贡献增大），团队开始推出副玩法衍生产品（Police Escape / Spook Escape），试图低成本导流主产品。</p>
+  </div>
+
+  <h4>2. 出价策略</h4>
+  <div class="strategy-block">
+    <p><strong>① 出价能力结构性弱于Dream Games系</strong>：全球ARPDAU均值在起步期峰值$0.48、爆发期降至$0.20、ROI调整期进一步降至$0.15——对比RM的$0.199和RK的$0.16，MV的变现能力在放量后未能维持。核心原因：关卡难度前置逼氪策略（$19.99高锚定首付）在小规模竞品玩家群体中有效，一旦受众扩展至泛用户即失效。</p>
+    <p><strong>② RPD增速缓慢，LTV回收周期过长</strong>：全球RPD峰值$3.41（爆发期），成熟市场(11国)RPD当前$6.51——对比RM同期RPD $11.82、RK同期RPD $9.37，MV的单位经济模型显著落后。MV的RPD曲线比RM和RK平坦得多，高净值三消玩家并不买单。</p>
+    <p><strong>③ 资本弹药严重不足</strong>：融资总额$8,300万 vs Dream Games $25亿+自身流水积累，在买量绞肉机中弹药差距悬殊。买量营销费用约$6,000万，而生命周期总营收约$6,992万（扣除30%渠道分成后净收入仅~$4,894万），项目已成亏损黑洞。</p>
+    <div class="sb-metric">
+      <div class="m-item"><div class="m-val">$2.67</div><div class="m-lab">当前全球RPD</div></div>
+      <div class="m-item"><div class="m-val">$6.51</div><div class="m-lab">当前成熟市场RPD</div></div>
+      <div class="m-item"><div class="m-val">$0.15</div><div class="m-lab">ROI调整期ARPDAU</div></div>
+      <div class="m-item"><div class="m-val">$8,300万</div><div class="m-lab">融资总额（种子+A轮）</div></div>
+    </div>
+  </div>
+
+  <h4>3. 分国家铺量策略</h4>
+  <div class="strategy-block">
+    <p><strong>投放策略总结</strong>：MV采取高度聚焦T1成熟市场的投放策略，美国以5.09%的广告占比居首，其后依次为澳大利亚(3.64%)、英国(3.62%)、德国(3.48%)、法国(3.26%)。与RM/RK不同的是，MV在新兴市场几乎没有主动投放（印度、巴西不在广告Top20中），但下载端印度(14.4%)和巴西(8.5%)占比极高，说明大量新兴市场下载为自然增长或交叉推广导入。</p>
+    <table>
+      <thead><tr><th>维度</th><th>收入Top5</th><th>下载Top5</th><th>广告投放Top5</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>国家及占比</strong></td>
+          <td>美国64.2%、英国7.9%、德国3.8%、加拿大3.2%、澳大利亚3.0%</td>
+          <td>美国18.4%、印度14.4%、巴西8.5%、菲律宾6.0%、印尼5.5%</td>
+          <td>美国5.09%、澳大利亚3.64%、英国3.62%、德国3.48%、法国3.26%</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><strong>与RM/RK的策略差异</strong>：MV收入极度集中于美国（64.2% vs RM约53% / RK约57%），对单一市场依赖度较高。下载端新兴市场占比大（印度+巴西+菲律宾+印尼=34.4%），但这些低ARPU用户大量稀释了整体RPD，是"放量后RPD下滑"的直接原因。RM和RK通过精准的T1市场集中投放+新兴市场克制增长维持了健康的RPD曲线，MV则未能有效控制新兴市场的低质量自然流入。</p>
+  </div>
+
+  <h4>4. 渠道策略</h4>
+  <div class="strategy-block">
+    <p>Match Villains 的渠道结构极度依赖 Meta 生态系统：<mark style="background:#fef08a;padding:0 2px;border-radius:2px;">Facebook / Meta Audience Network / Instagram / Messenger / Threads 五平台合计占比<strong>77.46%</strong></mark>。相较于 Royal Match 的Meta系39.29%以及AppLovin、AdMob、Unity等多渠道分散布局，MV的渠道集中度带来了显著的风险敞口。</p>
+    <table>
+      <thead><tr><th>渠道</th><th>广大大广告投放占比</th><th>角色与逻辑</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Meta系（Facebook / Meta Audience Network / Instagram / Messenger / Threads）</strong></td><td><strong>77.46%</strong></td><td><strong>绝对主力</strong>；五平台高度集中，渠道依赖风险高<br>（Facebook 18.92% / Meta Audience Network 15.79% / Instagram 18.53% / Messenger 18.44% / Threads 5.78%）</td></tr>
+        <tr><td>AppLovin</td><td>7.91%</td><td><strong>补量渠道</strong>，游戏内网络补量</td></tr>
+        <tr><td>Google AdMob</td><td>5.20%</td><td><strong>补量渠道</strong>，程序化补量</td></tr>
+        <tr><td>Unity Ads</td><td>2.83%</td><td><strong>补量渠道</strong>，游戏内广告网络</td></tr>
+        <tr><td>ironSource</td><td>2.10%</td><td><strong>补量渠道</strong>，激励视频补量</td></tr>
+        <tr><td>Vungle+Mintegral</td><td>1.81%</td><td><strong>补量渠道</strong>；Vungle 1.31% + Mintegral 0.50%</td></tr>
+        <tr><td>Kwai(快手)</td><td>1.15%</td><td><strong>新兴渠道</strong>，新兴流量测试</td></tr>
+      </tbody>
+    </table>
+    <p><strong>渠道集中度对比</strong>：<mark style="background:#fef08a;padding:0 2px;border-radius:2px;">RM的Meta系39.29% / RK的AppLovin主导33.14% / MV的Meta系77.46%</mark>——MV几乎完全依赖Meta一个生态。一旦Meta政策调整或竞价环境恶化，替代方案有限。</p>
+  </div>
+
+  <h4>5. 素材策略</h4>
+  <div class="strategy-block">
+    <p><strong>素材产量增长迅速但效率递减</strong>：从测试期月均72条→起步期月均847条→爆发期月均3,061条→ROI调整期月均4,378条。2026年5月单月素材量达7,232条（峰值），产能已接近RK水平（RK大推期〔新兴市场扩量〕月均4,000–5,000条）。</p>
+    <p><strong>三大素材类型</strong>：① <strong>副玩法买量（警察捉小偷）</strong>——2026年主力吸量素材，将买量副玩法单独剥离为衍生产品（Police Escape），把投入产出比拉到极致；② <strong>三段式危机拼接</strong>——延续三消品类通用公式"突进开头+危机塑造+故意失败"，MV特色是在单条素材中堆叠5–6个危机创意，视觉冲击拉满；③ <strong>Fake Ad（回退策略）</strong>——2026年5月退回伪玩法素材，试图通过CTR提升弥补出价劣势。</p>
+    <p><strong>与RM/RK的核心差异</strong>：RM/RK在素材策略上走"高投入明星代言+品牌向"路线，MV则完全走效果广告路线——没有明星代言、没有品牌向内容、没有交叉推广优势。素材虽然在创意上有差异化（怪盗IP世界观延伸），但缺乏品牌壁垒。</p>
+    <table>
+      <thead><tr><th>素材类型</th><th>描述</th><th>角色/阶段</th></tr></thead>
+      <tbody>
+        <tr><td><strong>副玩法买量（警察捉小偷）</strong></td><td>将三消外的解谜副玩法做成吸量素材，甚至衍生为独立产品</td><td>2026年主力</td></tr>
+        <tr><td><strong>三段式危机拼接</strong></td><td>突进开头+多重危机+故意失败，单条素材5–6个hook点</td><td>全周期核心</td></tr>
+        <tr><td><strong>竞品玩家定向素材</strong></td><td>瞄准RM/CCS资深玩家，强调差异化体验</td><td>早期主力</td></tr>
+        <tr><td><strong>Fake Ad（回退）</strong></td><td>伪玩法素材，ROI承压后通过CTR提升弥补出价劣势</td><td>2026年回退使用</td></tr>
+        <tr><td><strong>3D动画IP剧情</strong></td><td>怪盗三人组冒险动画，品牌向但产量低</td><td>留存钩子</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>6. 核心困境：放量与质量的矛盾</h4>
+  <div class="strategy-block">
+    <p>Match Villains 面临的核心困境是买量规模与用户质量之间的不可调和矛盾。关卡架构的惩罚性设计（摄像头锁定道具、激光摧毁合成路线）和过早逼氪（第25关即出现明显难度飙升，60关后频繁硬卡点），违背了三消品类"长蜜月期+缓慢爬坡"的底层规律。对比RM"千方百计保护玩家爽感"的设计哲学，MV走向了完全反面。</p>
+    <table>
+      <thead><tr><th>指标</th><th>起步期峰值(2025.4–6)</th><th>爆发期(2025.10)</th><th>ROI调整期(2026.Q1)</th><th>变化趋势</th></tr></thead>
+      <tbody>
+        <tr><td>D1（成熟市场）</td><td>41–43%</td><td>~35%</td><td>28%</td><td><strong style="color:var(--red)">持续下降</strong></td></tr>
+        <tr><td>D30（成熟市场）</td><td>7.8–8.6%</td><td>~6%</td><td>4.0%</td><td><strong style="color:var(--red)">−53%</strong></td></tr>
+        <tr><td>ARPDAU（全球）</td><td>$0.34（avg）/ $0.48（peak）</td><td>$0.20（avg）</td><td>$0.15（avg）</td><td><strong style="color:var(--red)">−56%</strong></td></tr>
+        <tr><td>MAU</td><td>129万（峰值）</td><td>780万（峰值）</td><td>903万→701万</td><td><strong style="color:var(--red)">冲高后回落</strong></td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead><tr><th>维度</th><th>Royal Match（2022扩量期）</th><th>Royal Kingdom（2025大推期·成熟市场）</th><th>Match Villains（2025爆发期）</th></tr></thead>
+      <tbody>
+        <tr><td>D30 扩量前→后</td><td>23.6% → 20.7%（<strong style="color:var(--green)">−12%</strong>）</td><td>10.8% → 14.3%（<strong style="color:var(--green)">+32%</strong>）</td><td>8.6% → 4.0%（<strong style="color:var(--red)">−53%</strong>）</td></tr>
+        <tr><td>放量韧性</td><td>量翻3倍留存仅降12%</td><td>量翻7倍留存反升</td><td>下载翻5.8倍但D30−53%</td></tr>
+        <tr><td>RPD走势</td><td>持续陡峭上升</td><td>稳健上升</td><td>平坦（外部评价）</td></tr>
+      </tbody>
+    </table>
+    <div class="note" style="border-left-color:var(--red)">
+      <strong>败局启示</strong>：在三消红海中，单纯依靠大额融资的资本催熟，试图用更高的美术规格和更激进的逼氪来缩短回本周期，无异于以卵击石。产品力（放量韧性）是唯一的护城河——"精准的底层系统复刻与极佳的执行力，远比盲目且拙劣的机制创新更容易获得稳定的商业回报"。
+    </div>
+  </div>
+
+  <h4>7. 关键成功要素与风险信号</h4>
+  <div class="ksf-grid">
+    <div class="ksf-card" style="border-left-color:var(--green)"><div class="kc-num" style="color:var(--green)">成功因素 01</div><div class="kc-title">"先验证后放量"的纪律性</div><div class="kc-desc">前6个月日消耗仅$1–2K，月广告不足100条，确认D30>8%后才启动规模化放量</div></div>
+    <div class="ksf-card" style="border-left-color:var(--green)"><div class="kc-num" style="color:var(--green)">成功因素 02</div><div class="kc-title">差异化IP定位与美术品质</div><div class="kc-desc">"反派怪盗"题材+电影级3D过场动画，在同质化三消市场中建立辨识度</div></div>
+    <div class="ksf-card" style="border-left-color:var(--green)"><div class="kc-num" style="color:var(--green)">成功因素 03</div><div class="kc-title">超休闲基因的营销嗅觉</div><div class="kc-desc">25亿下载积累的素材方法论——副玩法衍生、多hook拼接、IP世界观延伸至素材</div></div>
+    <div class="ksf-card" style="border-left-color:var(--red)"><div class="kc-num" style="color:var(--red)">风险 01</div><div class="kc-title">放量韧性严重不足</div><div class="kc-desc">D30放量后−53%，关卡架构惩罚性设计+逼氪前置摧毁长线留存根基</div></div>
+    <div class="ksf-card" style="border-left-color:var(--red)"><div class="kc-num" style="color:var(--red)">风险 02</div><div class="kc-title">资金枯竭风险</div><div class="kc-desc">累计收入~$6,992万 vs 买量支出预估$6,000万+，扣除30%渠道费后净收入仅~$4,894万，已是亏损黑洞</div></div>
+    <div class="ksf-card" style="border-left-color:var(--red)"><div class="kc-num" style="color:var(--red)">风险 03</div><div class="kc-title">渠道与策略倒退</div><div class="kc-desc">Meta系占77.46%极度集中；SOV回调+退回fake ad+推出副玩法衍生品，均为ROI不达标后的被迫调整</div></div>
+  </div>
+</section>
+
+<!-- 2.4 Project Makeover -->
+<section id="p2-4">
+  <h3 id="p2-4">2.4 Project Makeover——"女性向差异化破局 + 成熟回收模型复用"的教科书级成功案例</h3>
+  <p>Project Makeover（Magic Tavern 出品，2020年11月全球上线）是三消品类中一个独特的成功范式：它并非依靠 Royal Match 式的"产品力飞轮"，也不是 Match Villains 式的"资本催熟"，而是凭借 <strong>"女性向改造 / 变妆"题材的市场空白 + 顶级美术叙事 + 复用前作 Matchington Mansion 已跑通的成熟回收模型</strong>，在上线首月即完成规模化引爆。其生命周期累计收入达 <strong>$8.70 亿</strong>，是一款验证了"用差异化题材切入红海、用成熟买量方法论快速放量"路径的长青产品。当前产品已从峰值（2021.01 月收入 $32M、MAU 3,000 万）回落至主投美国市场的长线运营阶段（2026.07 MAU 581万）。</p>
+
+  <div class="chart-box">
+    <div class="cb-title">Project Makeover 发行阶段：月下载量 vs 广告投放量（2020.09–2026.07）</div>
+    <div class="cb-sub">数据来源：Sensor Tower + 广大大 ｜ 柱状图=月下载（万） ｜ 折线=月广告数 ｜ 背景色=阶段划分</div>
+    <div class="chart-canvas-wrap phase-chart-wrap"><canvas id="chartPMPhase" width="1237" height="720" style="display: block; box-sizing: border-box; height: 360px; width: 618px;"></canvas></div>
+    <div class="chart-annotations">
+      <span class="ann-item" style="background:rgba(13,148,136,.1);color:#0d9488">● 测试期 2020.09–2020.10</span>
+      <span class="ann-item" style="background:rgba(220,38,38,.1);color:#dc2626">● 大推期 2020.11–2021.03</span>
+      <span class="ann-item" style="background:rgba(37,99,235,.1);color:#2563eb">● T1市场持续扩量 2021.04–2022.06</span>
+      <span class="ann-item" style="background:rgba(5,150,105,.1);color:#059669">● 主投美国市场 2022.07–至今</span>
+    </div>
+  </div>
+
+  <h4>1. 发行阶段策略</h4>
+  <table>
+    <thead><tr><th>阶段</th><th>时间</th><th>关键动作</th><th>月均下载</th><th>月均流水</th><th>MAU</th><th>月均广告数</th><th>资金来源</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="stage-badge sb-teal">测试期</span></td>
+        <td>2020.09–2020.10</td>
+        <td>2020.09 在加/澳/荷/挪/新等小市场启动测试，2020.10追加日本；<br>验证女性向改造玩法与前作回收模型，同时完成上线前一年多的素材测试，累计约200条已验证素材</td>
+        <td>12.5万</td>
+        <td>$0.26M</td>
+        <td>约13万</td>
+        <td>约78条</td>
+        <td>母公司自有资金</td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-red">大推期</span></td>
+        <td>2020.11–2021.03</td>
+        <td>上线即大推——预算无上限、叠加苹果推荐位，1.5个月密集轰炸；<br>主投美英德日韩，美国占比约60%；单日峰值消耗约350万美金、大推累计约1.6亿美金</td>
+        <td><strong>1,312万</strong></td>
+        <td><strong>$21.5M</strong>（峰值$32M）</td>
+        <td>峰值2,996万</td>
+        <td>约4,054条</td>
+        <td>母公司资金+流水自持</td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-blue">T1市场持续扩量</span></td>
+        <td>2021.04–2022.06</td>
+        <td>大推后继续在美国、英国、德国、日韩等T1市场扩量，美英德日韩合计占投放约70–80%；<br>持续LiveOps和素材迭代，以成熟市场回收支撑长线买量</td>
+        <td>542万</td>
+        <td>$18.3M</td>
+        <td>均值2,042万</td>
+        <td>约3,250条</td>
+        <td>流水自持</td>
+      </tr>
+      <tr>
+        <td><span class="stage-badge sb-green">主投美国市场</span></td>
+        <td>2022.07–至今</td>
+        <td>美国成为主要可持续回收市场，其他地区逐步转入缓慢下降或维持；<br>日消耗回落至约60万美元、月消耗约1,800万美元，并以能跑正ROI的渠道补量</td>
+        <td>332万</td>
+        <td>$10.1M</td>
+        <td>2,098万→581万</td>
+        <td>约3,019条</td>
+        <td>流水自持</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="strategy-block">
+    <p><strong>发行阶段策略总结</strong>：Project Makeover 的市场测试期虽然只有2020年9–10月，但素材准备提前一年多启动，上线前已积累约200条验证有效的素材。2020年11月正式上线后叠加苹果推荐位，在预算无上限的授权下进入大推，首月下载1,047万、次月1,417万，2021年1月达到2,213万峰值。</p>
+    <p><strong>大推的底气来自成熟回收模型的复用 + 自我造血</strong>：Magic Tavern（麦吉太文，前作 Matchington Mansion 发行商）已跑通三消+装扮的回收模型，Project Makeover 直接继承了这套成熟的LiveOps与变现框架。值得注意的是，<mark style="background:#fef08a">Magic Tavern 仅在 2016 年拿过山行资本约¥1000万 A 轮，此后完全依靠 Matchington Mansion 的现金流自我造血，PM 大推的巨额预算并非来自外部融资</mark>——这与 Royal Match/Royal Kingdom（Dream Games 连续大额VC融资）、Match Villains（"融资到账才敢放量"）形成鲜明对比。PM 是"用前作现金流 + 已验证方法论 + 差异化题材"实现快速引爆的典型。</p>
+    <p><strong>大推之后的长线走势</strong>：2021年4月起，PM继续在美国、英国、德国、日韩等T1市场扩量，依靠成熟回收模型和LiveOps维持买量。2022年7月后，投放进一步集中到美国，其他地区逐步转入缓慢下降或维持；尽管下载和MAU回落，月广告数在2025年中仍一度冲至8,000+条，体现其以美国高价值用户回收支撑长线运营的策略。</p>
+  </div>
+
+  <h4>2. 出价策略</h4>
+  <div class="strategy-block">
+    <p>Project Makeover 的出价能力显著低于 Royal Match/Royal Kingdom，属于<strong>"中等LTV + 成熟市场深耕"</strong>型。其全球 RPD 仅 $2.83、ARPDAU $0.155，但成熟市场（尤其美国）表现明显更强——成熟市场 RPD 达 $7.54、ARPDAU $0.273，约为全球口径的2.5–2.7倍。这解释了 PM 后期为何"只有美国还跑得动"：全球泛量用户的变现深度不足以支撑高CPI买量，唯有美国等高ARPU市场的存量用户才能维持正向ROI。</p>
+    <p><strong>回收标准</strong>：美区 MAI 出价 &lt;$2、AEO 出价 &lt;$4–5；次留约45%、7留约20%；变现回收纪律为"第1年回收110%后放宽，第2年回收140%（约17个月回本）"。这套标准比 RM/RK 的回本容忍度（2年+）更为保守克制，也决定了 PM 无法像 Dream Games 系那样进行无上限的全球放量。</p>
+    <div class="sb-metric">
+      <div class="m-item"><div class="m-val">$7.54</div><div class="m-lab">RPD · 成熟市场双平台（最新）</div></div>
+      <div class="m-item"><div class="m-val">$2.83</div><div class="m-lab">RPD · 全球双平台（最新）</div></div>
+      <div class="m-item"><div class="m-val">$0.273</div><div class="m-lab">ARPDAU · 成熟市场（最新）</div></div>
+      <div class="m-item"><div class="m-val">$0.155</div><div class="m-lab">ARPDAU · 全球（最新）</div></div>
+      <div class="m-item"><div class="m-val">MAI&lt;$2 / AEO&lt;$4–5</div><div class="m-lab">美区出价上限</div></div>
+      <div class="m-item"><div class="m-val">约17个月</div><div class="m-lab">回本周期（1年110%→2年140%）</div></div>
+    </div>
+  </div>
+
+  <h4>3. 分国家铺量策略</h4>
+  <div class="strategy-block">
+    <p>Project Makeover 的国家铺量策略<strong>以美国为绝对核心，呈现出从T1集中放量到美国单点收敛的路径：</strong>测试期先在北欧多个国家验证，随后拓展到英国、澳大利亚等英语市场；前期集中投放美国、英国、德国、日本和韩国（五国合计占投放约70–80%，其中美国约60%）；后期因只有美国市场的投放效果较好，主动投放预算进一步收敛到美国，其他地区进入“缓慢下降/维持”状态，新兴市场则更多承担自然获量。</p>
+    <p><strong>关键转变</strong>：前期美国贡献阶段收入的<strong>61.34%</strong>、下载占比22.19%，均居首位；日本收入占7.72%、英国4.44%、德国3.20%、韩国2.18%，核心变现国家明显集中于T1市场。后期美国收入仍占<strong>56.71%</strong>、保持绝对第一，但下载占比降至8.81%，低于巴西9.72%和印度9.23%。</p>
+    <table>
+      <thead><tr><th>维度</th><th>Top 1</th><th>Top 2</th><th>Top 3</th><th>Top 4</th><th>Top 5</th><th>特征</th></tr></thead>
+      <tbody>
+        <tr><td><strong>收入占比</strong></td><td><strong>美国 58.69%</strong></td><td>日本 6.68%</td><td>英国 4.72%</td><td>德国 3.91%</td><td>加拿大 3.53%</td><td>美国单极主导、成熟市场变现</td></tr>
+        <tr><td><strong>下载占比</strong></td><td>美国 15.19%</td><td>巴西 8.72%</td><td>印度 7.35%</td><td>印尼 4.90%</td><td>墨西哥 4.41%</td><td>下载分散、新兴市场自然量多</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>4. 渠道策略</h4>
+  <div class="strategy-block">
+    <p>PM的渠道策略以<strong>Meta为绝对主投、Google为辅助主渠道</strong>，整体呈现Meta约六成、Google约三成的主辅结构。Meta系（Facebook / FAN / Instagram / Messenger / Threads）合计65.81% + Google AdMob 23.67%，双巨头合计约89.5%。其中Facebook、Meta Audience Network、Instagram、Messenger四个平台几乎均分（均在15–18%区间），覆盖信息流、应用内网络、图片社交和IM场景。</p>
+    <table>
+      <thead><tr><th>渠道</th><th>广大大广告投放占比</th><th>角色与逻辑</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Meta系（Facebook / Meta Audience Network / Instagram / Messenger / Threads）</strong></td><td><strong>65.81%</strong></td><td><strong>绝对主投</strong>；前期预算约占六成，覆盖女性向泛用户全场景<br>（Facebook 18.21% / Meta Audience Network 15.96% / Instagram 15.97% / Messenger 14.98% / Threads 0.69%）</td></tr>
+        <tr><td><strong>Google AdMob</strong></td><td><strong>23.67%</strong></td><td><strong>辅助主渠道</strong>；前期预算约占四成，重点承担Android规模化获客</td></tr>
+        <tr><td>YouTube</td><td>5.26%</td><td><strong>重点渠道</strong>，视频端品牌曝光与"丑变美"改造叙事素材投放</td></tr>
+        <tr><td>AppLovin</td><td>2.46%</td><td><strong>协同补量渠道</strong>，由AppLovin协助自有渠道投放，并承接可跑正ROI的游戏内流量</td></tr>
+        <tr><td>Vungle+Mintegral</td><td>0.58%</td><td><strong>小规模补量</strong>；Vungle 537条（0.42%）+ Mintegral 191条（0.15%），合计728条（0.58%）</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px"><strong>渠道范式对比</strong>：RM保留Meta与游戏内网络的多元组合，RK以AppLovin为主，MV高度集中于Meta；PM则以Meta为首要预算承接渠道、Google为辅助主渠道，渠道重心更接近“Meta主投、Google补充”的结构。</p>
+  </div>
+
+  <h4>5. 素材策略</h4>
+  <div class="strategy-block">
+    <p>Project Makeover 的素材核心是 <strong>"改造/变妆"叙事 + 情绪刺激</strong>。早期以常规化妆、穿搭和换装素材为基础，随后跑出两类核心爆款。① <strong>ASMR极端改造</strong>，例如刮腿毛、刮脖子、全身裹泥等强感官桥段；② <strong>“丑变美”情绪刺激</strong>，通过被嘲笑、被伴侣抛弃等冲突激发用户的纠正欲和尝试欲。两类素材都强化了女性向改造题材的辨识度，但部分内容也带来性别对立、贬低女性和身材焦虑等争议。</p>
+    <p><strong>爆款集中度与素材寿命</strong>：主投渠道的头部素材高度集中，爆款约承接40%的投放预算。不同渠道的生命周期差异明显：Facebook素材通常可跑约2–3周，Google可持续1个月以上，AppLovin的头部爆款甚至能运行数月。素材老化不仅来自自然衰减，也来自同行快速抄袭——爆款一旦出现便被同类产品跟进，导致创意优势被迅速拉平。</p>
+    <p><strong>测试积累与素材产能</strong>：PM在上线前一年多就开始测试玩法、题材和画风的吸量能力，正式上线前已积累约200条验证有效的素材。素材预算约占投放预算的10%，前期单条外包制作成本约4万元，后期通过资产复用降至约2–3万元。</p>
+    <p><strong>素材量级</strong>：PM累计投放素材约16.1万条。大推期（现有7周数据）周均在投678条，T1市场持续扩量期周均在投754条，主投美国市场期周均在投507条。新素材产量上，爆发期每周新增约20条，稳定期每周新增十几条。</p>
+    <table>
+      <thead><tr><th>素材类型</th><th>描述</th><th>角色/占比</th></tr></thead>
+      <tbody>
+        <tr><td><strong>ASMR 极端改造（核心爆款）</strong></td><td>刮腿毛、刮脖子、全身裹泥等猎奇改造桥段，强化ASMR感官刺激</td><td>主力爆款</td></tr>
+        <tr><td><strong>丑变美改造叙事</strong></td><td>改造前后强反差，情绪刺激驱动点击</td><td>核心转化钩子</td></tr>
+        <tr><td><strong>常规化妆 / 穿搭展示</strong></td><td>展示化妆、换装和装扮的核心体验</td><td>基础素材类型</td></tr>
+        <tr><td><strong>争议性情绪素材</strong></td><td>性别对立 / 身材焦虑等强情绪内容</td><td>被验证有效但有争议</td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top:12px"><strong>分阶段素材投放量（月均广告/峰值月：<span class="v7upd">广大大</span>；周均素材：AppGrowing）</strong></p>
+    <table>
+      <thead><tr><th>阶段</th><th>月均广告</th><th>峰值月</th><th>周均素材</th></tr></thead>
+      <tbody>
+        <tr><td>测试期</td><td>78</td><td>101</td><td>—</td></tr>
+        <tr><td>大推期</td><td>4,054</td><td>7,343</td><td>678（覆盖7周）</td></tr>
+        <tr><td>T1市场持续扩量</td><td>3,250</td><td>6,161</td><td>754</td></tr>
+        <tr><td>主投美国市场</td><td>3,019</td><td>8,248</td><td>507</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:16px;padding:14px 18px;background:var(--blue-lt,#eff6ff);border-left:3px solid var(--blue,#2563eb);border-radius:6px;">
+      <p style="margin:0 0 8px;font-weight:700;color:var(--blue,#2563eb);">素材策略启发总结</p>
+      <p style="margin:0 0 6px;"><strong>1. 提前完成素材储备</strong>：上线前一年多开始测试，提前积累约200条验证有效的素材，使正式发布时能够直接承接大规模预算。</p>
+      <p style="margin:0 0 6px;"><strong>2. 爆款集中放大投放效率</strong>：约40%的预算集中在头部爆款，通过延长Google和AppLovin等渠道的素材寿命，持续放大少数高效创意的贡献。</p>
+      <p style="margin:0;"><strong>3. 差异化题材与争议风险并存</strong>：女性向改造、ASMR极端改造和“丑变美”情绪叙事形成明显的题材红利，但性别对立、身材焦虑等表达也带来平台合规和品牌形象风险。</p>
+    </div>
+  </div>
+
+  <h4>6. 关键成功要素（KSF）</h4>
+  <div class="ksf-grid">
+    <div class="ksf-card"><div class="kc-num">KSF 01</div><div class="kc-title">女性向差异化题材破局</div><div class="kc-metrics"><span>改造/变妆题材</span><span>市场空白切入</span><span>首月下载1,047万</span></div><div class="kc-desc">用"女性向改造"题材+顶级美术叙事切入三消红海的空白地带，配合ASMR极端改造情绪爆款素材，实现上线即引爆。差异化题材是PM低成本快速起量的根本前提。</div></div>
+    <div class="ksf-card"><div class="kc-num">KSF 02</div><div class="kc-title">复用成熟回收模型</div><div class="kc-metrics"><span>前作 Matchington Mansion</span><span>次留45% / 7留20%</span><span>约17个月回本</span></div><div class="kc-desc">直接继承 Magic Tavern 前作已跑通的三消+装扮回收模型与LiveOps框架，使其敢于在上线初期"预算无上限"大推——这是PM区别于MV"催熟"的关键：方法论先行，而非盲目砸钱。</div></div>
+    <div class="ksf-card" style="border-left-color:var(--red)"><div class="kc-num" style="color:var(--red)">风险 01</div><div class="kc-title">差异化红利随抄袭衰减</div><div class="kc-desc">爆款素材被同行大量抄袭，导致素材老化加速；差异化题材的先发红利难以长期独占，下载与MAU自大推后持续回落。</div></div>
+    <div class="ksf-card" style="border-left-color:var(--red)"><div class="kc-num" style="color:var(--red)">风险 02</div><div class="kc-title">变现深度不足、依赖美国</div><div class="kc-desc">全球RPD仅$2.83，唯成熟市场（美国收入占比58.69%）能支撑正向ROI，后期被迫聚焦美国维持，泛量市场难以规模化变现。</div></div>
+    <div class="ksf-card" style="border-left-color:var(--red)"><div class="kc-num" style="color:var(--red)">风险 03</div><div class="kc-title">争议素材的品牌合规隐患</div><div class="kc-desc">性别对立/身材焦虑类素材虽转化有效但有争议，存在平台合规与品牌形象风险，是情绪刺激走极端的副作用。</div></div>
+  </div>
+</section>
+
+<!-- 2.5 Other Products -->
+<section id="p2-5">
+  <h3 id="p2-5">2.5 其他产品策略简述</h3>
+  <div class="strategy-block">
+    <div class="sb-head"><span class="icon">🔄</span>Gardenscapes（模式②→转型中）</div>
+    <p>Gardenscapes 正在经历从模式②（素材降CPI）向模式①（学 RM 方法论）的深刻转型。2026年 Playrix 全面 All-in AI 素材，素材量暴增约86%。转型效果显著——D30 从 11.6% 跳升至 14.7%（+28%），主因是 Season Pass 上线和高密度 LiveOps 体系全面铺开（7大活动类型、每周7–12个平行活动）。全球 ARPDAU 也从1月的 $0.147 大幅回升至6月的 $0.228（+55%），Playrix 的策略转型在全球范围正在起效。</p>
+    <p>但需注意，成熟市场 ARPDAU 仍在下降（约 $0.50→$0.32），说明策略从"少数用户高付费"转向"更多用户中等付费"——变现逻辑正在变化，效果尚需持续观察。此外，MAU 仍在缓慢下降（2770万→2640万），留存改善减缓了流失速度但尚未逆转趋势。</p>
+  </div>
+  <div class="strategy-block">
+    <div class="sb-head"><span class="icon">👑</span>Candy Crush Saga（模式③，恒态）</div>
+    <p>Candy Crush Saga 展现了三消品类品牌型产品的极致稳定性。付费占比极其稳定（23–26%），自然量始终占约71–74%，渠道结构五年来几乎未变。2026年营销重心在品牌层——All Stars 全明星赛、线下装置、YouTube 纪录片等品牌活动。成熟市场 ARPDAU 4年增长约170%（$0.20→$0.547），策略是"用变现深度弥补用户自然流失"。但全球 ARPDAU 仅 $0.122——被新兴市场大量低付费用户稀释。这意味着 Candy Crush 在全球口径下的买量竞争力实际上低于 Royal Match，其模式对新品不可复制（需要12年品牌积累）。</p>
+  </div>
+</section>
+
+<hr>
+
+<!-- Part 3 -->
+<section id="p3">
+  <h2><span class="num">03</span>第三部分：买量环境变化及对策略的影响</h2>
+  <p class="h2sub">先列事实再判断关联，不强行对应因果、不编造事实</p>
+
+  <h3>3.1 环境变化六大事实（均有数据支撑）</h3>
+  <table>
+    <thead><tr><th>#</th><th>事实</th><th>数据</th><th>来源</th></tr></thead>
+    <tbody>
+      <tr><td><strong>一</strong></td><td>AppLovin iOS 垄断加剧</td><td>iOS 广告收入份额约39%（2026Q1）；AXON 2.0 使广告花费翻倍级增长</td><td>Tenjin 2026 / AppLovin 财报</td></tr>
+      <tr><td><strong>二</strong></td><td>ATT 持续重塑渠道格局</td><td>iOS 广告收入占比从63%降至43%；Meta iOS 归因和定向受限</td><td>Tenjin / AppsFlyer 2025</td></tr>
+      <tr><td><strong>三</strong></td><td>AI 素材成为标配</td><td>AI 素材占比 2025年20–25%→2026预测 &gt;50%；素材寿命从7–10天降至&lt;5天</td><td>DataEye / Liftoff / Udonis</td></tr>
+      <tr><td><strong>四</strong></td><td>平台打击 Fake Ad</td><td>ASA/FTC 裁定 fake ad "具有误导性"；Apple/Google/Meta/TikTok 严打</td><td>ASA 2020 / 平台政策</td></tr>
+      <tr><td><strong>五</strong></td><td>可玩广告和 UGC 成最优格式</td><td>可玩广告 IPM 比视频高66%（4.8 vs 2.9）、疲劳周期长67%（15.4天 vs 9.2天）；UGC 疲劳比精制广告慢30–40%</td><td>Liftoff / Meta 内部数据</td></tr>
+      <tr><td><strong>六</strong></td><td>Dream Games 系 SOV 集中</td><td>RM+RK 占品类约51.3% SOV；新品面对结构性出价压制</td><td>Sensor Tower</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.2 环境变化对四模式的影响：每条都在挤压模式②、利好模式①</h3>
+  <table>
+    <thead><tr><th>因素</th><th>对模式②（素材降CPI）的影响</th><th>对模式①（高LTV）的影响</th></tr></thead>
+    <tbody>
+      <tr><td>ATT/隐私政策</td><td>归因精度下降→素材效果难衡量→ROI不确定</td><td>LTV预测基于一方数据→不受影响</td></tr>
+      <tr><td>AI 素材生成</td><td>素材门槛降低→差异化窗口期缩短</td><td>AI 辅助关卡设计→产品迭代加速</td></tr>
+      <tr><td>监管加严</td><td>Fake ad 合规风险增加</td><td>真实素材无合规风险</td></tr>
+      <tr><td>平台算法进化</td><td>算法更看重LTV信号</td><td>高LTV产品天然获算法加权</td></tr>
+      <tr><td>AppLovin iOS 垄断</td><td>CPI 上涨挤压低LTV产品利润</td><td>高LTV产品可承受更高CPI</td></tr>
+      <tr><td>Dream Games SOV 51%</td><td>低LTV产品被出价碾压</td><td>需更高LTV才能与之竞争</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3.3 当前环境下新品最优模式论证</h3>
+  <p><strong>2021年后跑出的新品无一例外走路径A</strong>。Royal Match（D30 20.7%）、Royal Kingdom（D30 14.3%且上升中）均验证了路径A的可行性。Match Villains（D30 4.0%，放量后下降）虽然走路径A但产品力尚不达标，处于"增长中但ROI承压"的状态。Kitchen Masters（D30 4.1%停滞）的 D1 已达40%+但 D30 仅4.1%，说明短线留存在改善，但7–30天的中期体验存在断层，尚未达标。</p>
+  <p>反例 Triple Match 3D（2022年上线）走模式B（创意差异化），年收入约1.4亿 vs Royal Match 的约14.3亿——天花板差约10倍。<strong>结论</strong>：在 Royal Match 已占据 CPI 出价制高点的当前环境下，新品唯一可验证的突围路径是做出更高的留存/LTV。路径B 被 AI 素材普及+平台监管削弱，路径C 需要多年品牌积累新品不具备。</p>
+  <table>
+    <thead><tr><th>产品</th><th>上线</th><th>D30（成熟市场）</th><th>路径</th><th>结果</th></tr></thead>
+    <tbody>
+      <tr><td>Royal Match</td><td>2021</td><td>20.7%</td><td>A</td><td>✅ 品类第一</td></tr>
+      <tr><td>Royal Kingdom</td><td>2024</td><td>14.3%（上升中）</td><td>A</td><td>✅ MAU 3,109万</td></tr>
+      <tr><td>Match Villains</td><td>2024</td><td>4.0%（放量后下降）</td><td>A</td><td>⚠️ 增长中但ROI承压</td></tr>
+      <tr><td>Kitchen Masters</td><td>2024</td><td>4.1%停滞</td><td>A（尝试中）</td><td>❌ 尚未达标</td></tr>
+      <tr><td>Triple Match 3D</td><td>2022</td><td>7.3%</td><td>B</td><td>❌ 天花板仅RM的1/10</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<hr>
+
+<!-- Part 4 -->
+<section id="p4">
+  <h2><span class="num">04</span>第四部分：三消发行的门槛和能力要求</h2>
+  <p class="h2sub">基于 RK/MV/KM 三个新品的实际数据，陈述"如果要发行一款三消产品，需要准备什么"</p>
+
+  <h3>4.1 产品力门槛（全球发布的数据标准）</h3>
+  <table>
+    <thead><tr><th>指标</th><th>最低标准（可发布）</th><th>理想标准（高概率成功）</th><th>数据依据</th></tr></thead>
+    <tbody>
+      <tr><td>D1（成熟市场）</td><td>&gt;40%</td><td>&gt;50%</td><td>RK 43–47% / MV 38–43% / KM 40–45%</td></tr>
+      <tr><td>D7（成熟市场）</td><td>&gt;20%</td><td>&gt;25%</td><td>RK 22–24% / MV 17–19%</td></tr>
+      <tr><td><strong>D30（成熟市场）</strong></td><td><strong>&gt;10%</strong></td><td><strong>&gt;15%</strong></td><td>RK 12–13%✅ / MV 8%⚠️ / KM 4%❌</td></tr>
+      <tr><td>ARPDAU（全球）</td><td>&gt;$0.15</td><td>&gt;$0.20</td><td>RK $0.185 / MV $0.153</td></tr>
+      <tr><td><strong>D30/D1（留存韧性比）</strong></td><td><strong>&gt;25%</strong></td><td><strong>&gt;30%</strong></td><td>RM 34.5% / RK 25.5% / MV 17.7%⚠️</td></tr>
+    </tbody>
+  </table>
+  <p><strong>关键规律</strong>（三个案例共同验证）：D30 &gt; 15%（如 RK 14.3% 且上升中）→放量后留存可控→ROI 可持续；D30 = 8–10%（如 MV 测试期）→放量后留存腰斩→ROI 承压；D30 &lt; 5%（如 KM 当前）→放量毫无意义→应继续打磨产品。</p>
+
+  <h3>4.2 资金准备与回本预期</h3>
+  <table>
+    <thead><tr><th>策略路径</th><th>所需资金/年</th><th>Soft Launch 时长</th><th>预期回本周期</th><th>案例验证</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A1：极致留存+大资本</strong></td><td>2–3亿美元</td><td>≥12个月</td><td>9–18个月</td><td>Royal Kingdom（黑石25亿融资）</td></tr>
+      <tr><td><strong>A2：高留存+中等买量</strong></td><td>5000万–1亿美元</td><td>6–12个月</td><td>12–24个月</td><td>Match Villains（8300万融资）</td></tr>
+      <tr><td><strong>B：差异化赛道+精准投放</strong></td><td>3000–8000万美元</td><td>6–12个月</td><td>6–12个月验证</td><td>Truck Star 等</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.3 素材生产能力要求（2026环境）</h3>
+  <table>
+    <thead><tr><th>维度</th><th>要求</th><th>依据</th></tr></thead>
+    <tbody>
+      <tr><td><strong>月产素材量</strong></td><td>100–200+条变体</td><td>素材寿命&lt;5天→需极高产量维持（DataEye/Liftoff）</td></tr>
+      <tr><td><strong>AI 素材占比</strong></td><td>&gt;50%</td><td>AI 负责变体量产，人类负责核心概念（行业预测2026）</td></tr>
+      <tr><td><strong>可玩广告配比</strong></td><td>20–30%</td><td>IPM 比视频高66%，疲劳周期长67%（Liftoff）</td></tr>
+      <tr><td><strong>UGC 创作者覆盖</strong></td><td>每个主要市场8–15名</td><td>UGC 疲劳比精制广告慢30–40%（Meta数据）</td></tr>
+      <tr><td><strong>素材熔断机制</strong></td><td>48–72小时内 CTR 低于阈值或 CPI 高于目标→立刻关停</td><td>仅约5%的测试素材能成为赢家（Udonis）</td></tr>
+      <tr><td><strong>素材方向</strong></td><td>真实玩法+情绪钩子 &gt; Fake Ad</td><td>平台监管+用户信任+留存保障（RM验证）</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.4 关注重点</h3>
+  <div class="ksf-grid">
+    <div class="ksf-card" style="border-left-color:var(--accent)"><div class="kc-num">产品端</div><div class="kc-title">D30&gt;10%是硬门槛</div><div class="kc-desc">RK(12–13%)、MV(8%边缘)、KM(4%不达标)共同验证。放量韧性比放量规模更重要——RM量翻3倍留存仅降12%，MV量翻数十倍留存降53%。中长线内容深度是瓶颈——KM D1已40%+但D30仅4%，断层在7–30天的中期体验。</div></div>
+    <div class="ksf-card" style="border-left-color:var(--teal)"><div class="kc-num">渠道端</div><div class="kc-title">游戏内网络优先</div><div class="kc-desc">AppLovin+Unity+Admob占70–86%；社交平台降为补充(&lt;20%)——ATT后Meta精准度下降；ASA做品牌防御；多产品矩阵需渠道差异化——RK刻意与RM差异化避免内卷。</div></div>
+    <div class="ksf-card" style="border-left-color:var(--gold)"><div class="kc-num">素材端</div><div class="kc-title">"广告即玩法"闭环</div><div class="kc-desc">素材与核心玩法一致→无预期落差→留存不打折；AI量产+人类创意分工；可玩广告是最优格式（IPM高66%+疲劳慢67%+平台合规）；Fake Ad已不可持续（监管打击+用户免疫+留存折扣）。</div></div>
+    <div class="ksf-card" style="border-left-color:var(--green)"><div class="kc-num">市场端</div><div class="kc-title">聚焦高LTV市场买量</div><div class="kc-desc">保护全球ARPDAU不被新兴市场稀释；自然量是长期护城河——RM从79%付费降至57%，自然量在"接棒"；品牌效应需3–4年积累——RM从2021爆发到2024品牌自持，转化周期长。</div></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<script>
+// Register annotation plugin
+Chart.register(window['chartjs-plugin-annotation']);
+
+// Common chart options
+const commonOpts = {
+  responsive:true,
+  maintainAspectRatio:false,
+  interaction:{mode:'index',intersect:false},
+  plugins:{
+    legend:{display:true,position:'top',labels:{font:{size:12},color:'#4a5568'}},
+    tooltip:{backgroundColor:'#1a2233',titleFont:{size:13},bodyFont:{size:12},padding:10}
+  },
+  scales:{
+    x:{grid:{color:'#eef1f6'},ticks:{font:{size:11},color:'#7b8aa3'}},
+  }
+};
+
+// 统一里程碑交互：小点位 + 近距离标签 + 引导线；悬停任一元素时同步强调
+function milestoneIsActive(ctx,key){
+  return ctx.chart.$activeMilestone===key;
+}
+function milestoneSetDate(ch,key,show){
+  const anns=ch.options&&ch.options.plugins&&ch.options.plugins.annotation&&ch.options.plugins.annotation.annotations;
+  if(!anns) return;
+  const lbl=anns[key+'Label'];
+  if(!lbl||!lbl.$date) return;
+  const base=lbl.$baseContent;
+  if(show){
+    lbl.content=Array.isArray(base)?base.concat([lbl.$date]):[base,lbl.$date];
+  }else{
+    lbl.content=base;
+  }
+}
+function milestoneEnter(key){
+  return function(ctx){
+    ctx.chart.$activeMilestone=key;
+    ctx.chart.canvas.style.cursor='pointer';
+    milestoneSetDate(ctx.chart,key,true);
+    ctx.chart.update('none');
+    return true;
+  };
+}
+function milestoneLeave(key){
+  return function(ctx){
+    if(ctx.chart.$activeMilestone===key) ctx.chart.$activeMilestone=null;
+    ctx.chart.canvas.style.cursor='default';
+    milestoneSetDate(ctx.chart,key,false);
+    ctx.chart.update('none');
+    return true;
+  };
+}
+function addMilestone(target,key,config){
+  const events={enter:milestoneEnter(key),leave:milestoneLeave(key)};
+  target[key]={
+    type:'point',
+    xValue:config.xValue,
+    yScaleID:'y1',
+    yValue:config.yValue,
+    radius:function(ctx){return milestoneIsActive(ctx,key)?5:3;},
+    hitTolerance:5,
+    backgroundColor:config.color,
+    borderColor:'#fff',
+    borderWidth:function(ctx){return milestoneIsActive(ctx,key)?2.5:1.5;},
+    ...events
+  };
+  target[key+'Label']={
+    type:'label',
+    xValue:config.xValue,
+    yScaleID:'y1',
+    yValue:config.yValue,
+    content:config.content,
+    $baseContent:config.content,
+    $date:config.date||null,
+    color:config.color,
+    font:{size:8,weight:'bold'},
+    backgroundColor:function(ctx){
+      return milestoneIsActive(ctx,key)?'rgba(255,255,255,1)':'rgba(255,255,255,0.92)';
+    },
+    borderColor:config.color,
+    borderWidth:function(ctx){return milestoneIsActive(ctx,key)?2:1;},
+    hitTolerance:2,
+    borderRadius:3,
+    padding:{top:2,bottom:2,left:4,right:4},
+    xAdjust:config.xAdjust||0,
+    yAdjust:config.yAdjust||-18,
+    callout:{
+      display:true,
+      borderColor:config.color,
+      borderWidth:1,
+      side:5,
+      margin:0
+    },
+    ...events
+  };
+}
+
+// === Royal Match Phase Chart (Downloads vs Ads) ===
+(function(){
+  const labels=['2020-07','2020-08','2020-09','2020-10','2020-11','2020-12','2021-01','2021-02','2021-03','2021-04','2021-05','2021-06','2021-07','2021-08','2021-09','2021-10','2021-11','2021-12','2022-01','2022-02','2022-03','2022-04','2022-05','2022-06','2022-07','2022-08','2022-09','2022-10','2022-11','2022-12','2023-01','2023-02','2023-03','2023-04','2023-05','2023-06','2023-07','2023-08','2023-09','2023-10','2023-11','2023-12','2024-01','2024-02','2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];
+  const downloads=[null,null,null,null,null,null,15.3,24.6,112.0,184.4,280.6,387.5,277.5,259.5,198.7,309.5,369.2,364.3,435.8,320.0,260.2,286.0,254.2,255.8,205.9,323.9,380.8,356.4,330.4,576.3,1029.6,769.7,799.6,1016.6,1241.6,1243.9,1497.7,1609.7,1293.7,1074.7,1121.8,1217.9,1885.6,1939.9,1173.7,833.3,918.9,854.8,779.9,763.3,741.7,710.3,436.9,502.1,608.5,612.9,687.2,799.0,806.0,883.0,950.9,983.9,564.3,345.5,336.5,371.9,520.8,413.5,411.3,360.1,299.7,301.7];
+  const ads=[0,253,267,301,244,334,598,642,715,1509,1360,1339,1467,1520,1353,1585,1644,1660,3285,1720,3710,5701,2452,1810,1905,1270,1789,2231,2026,1974,2404,2419,2403,2878,3507,3710,5210,6412,6228,5033,5156,6274,6081,5589,5230,5367,5183,5466,5431,4681,4333,3533,2978,2358,2724,4324,3612,3740,4549,3580,4506,3975,3415,3314,2902,3891,4668,5633,7128,8098,8152,19270];
+  // Phase boundaries
+  const phases=[
+    {start:0,end:6,label:'测试期',color:'rgba(13,148,136,0.08)',border:'rgba(13,148,136,0.4)'},
+    {start:7,end:17,label:'上升期',color:'rgba(220,38,38,0.08)',border:'rgba(220,38,38,0.4)'},
+    {start:18,end:25,label:'平稳期',color:'rgba(37,99,235,0.08)',border:'rgba(37,99,235,0.4)'},
+    {start:26,end:43,label:'爆发期',color:'rgba(234,88,12,0.08)',border:'rgba(234,88,12,0.4)'},
+    {start:44,end:71,label:'稳定运营期',color:'rgba(5,150,105,0.08)',border:'rgba(5,150,105,0.4)'}
+  ];
+  // Build annotation boxes and vertical lines
+  const annotations={};
+  phases.forEach(function(p,i){
+    annotations['phase'+i]={type:'box',xMin:p.start-0.5,xMax:p.end+0.5,backgroundColor:p.color,borderColor:p.border,borderWidth:1,z:-1};
+    annotations['label'+i]={type:'label',xValue:(p.start+p.end)/2,yScaleID:'y',yValue:1850,content:p.label,color:p.border.replace(',0.4)',',1)'),font:{size:10,weight:'bold'},backgroundColor:'rgba(255,255,255,0.78)',borderRadius:3,padding:{top:2,bottom:2,left:5,right:5}};
+    if(i>0){
+      annotations['line'+i]={type:'line',xMin:p.start-0.5,xMax:p.start-0.5,borderColor:'rgba(100,116,139,0.4)',borderWidth:1,borderDash:[4,3]};
+    }
+  });
+  // 标签只做短距离错层，引导线负责明确对应关系
+  addMilestone(annotations,'rmTest',{xValue:0,yValue:ads[0],content:'英/加/土启动测试',color:'#059669',xAdjust:42,yAdjust:-24});
+  addMilestone(annotations,'rmSeed',{xValue:0,yValue:ads[0],content:'种子轮$750万',color:'#dc2626',xAdjust:32,yAdjust:-50});
+  addMilestone(annotations,'rmIsrael',{xValue:5,yValue:ads[5],content:'追加以色列测试',color:'#2563eb',xAdjust:-8,yAdjust:-64});
+  addMilestone(annotations,'rmLaunch',{xValue:7,yValue:ads[7],content:'正式上线',color:'#059669',xAdjust:6,yAdjust:-78});
+  addMilestone(annotations,'rmA',{xValue:8,yValue:ads[8],content:'A轮$5000万',color:'#dc2626',xAdjust:18,yAdjust:-106});
+  addMilestone(annotations,'rmB',{xValue:11,yValue:ads[11],content:'B轮$1.55亿',color:'#dc2626',xAdjust:10,yAdjust:-114});
+  addMilestone(annotations,'rmC',{xValue:18,yValue:ads[18],content:'C轮$2.55亿',color:'#dc2626',xAdjust:8,yAdjust:-78});
+  addMilestone(annotations,'rmPE',{xValue:55,yValue:ads[55],content:'CVC+黑石~25亿',color:'#dc2626',xAdjust:0,yAdjust:-28});
+  const ctx=document.getElementById('chartRMPhase');
+  if(ctx){
+    new Chart(ctx,{
+      type:'bar',
+      data:{
+        labels:labels,
+        datasets:[
+          {type:'bar',label:'月下载（万）',data:downloads,backgroundColor:'rgba(37,99,235,0.6)',borderColor:'rgba(37,99,235,0.8)',borderWidth:1,yAxisID:'y',order:2},
+          {type:'line',label:'月广告数',data:ads,borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,0.1)',fill:false,tension:0.3,yAxisID:'y1',pointRadius:2,pointBackgroundColor:'#dc2626',borderWidth:2,order:1,spanGaps:true}
+        ]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{mode:'index',intersect:false},
+        plugins:{
+          legend:{display:true,position:'top',labels:{font:{size:12},color:'#4a5568'}},
+          tooltip:{backgroundColor:'#1a2233',titleFont:{size:13},bodyFont:{size:12},padding:10},
+          annotation:{annotations:annotations}
+        },
+        scales:{
+          x:{grid:{display:false},ticks:{font:{size:9},color:'#7b8aa3',maxRotation:45,autoSkip:true,autoSkipPadding:8}},
+          y:{type:'linear',position:'left',title:{display:true,text:'月下载（万）',font:{size:12},color:'#2563eb'},grid:{color:'#eef1f6'},ticks:{color:'#2563eb',font:{size:11}}},
+          y1:{type:'linear',position:'right',title:{display:true,text:'月广告数',font:{size:12},color:'#dc2626'},grid:{drawOnChartArea:false},ticks:{color:'#dc2626',font:{size:11}}}
+        }
+      }
+    });
+  }
+})();
+
+// === Royal Match Chart ===
+const rmLabels=['2021H1','2021H2','2022H1','2022H2','2023H1','2023H2','2024H1','2024H2','2025H1','2025H2','2026H1'];
+new Chart(document.getElementById('chartRM'),{
+  type:'bar',
+  data:{
+    labels:rmLabels,
+    datasets:[
+      {type:'line',label:'MAU（万）',data:[260,930,1390,1680,3320,4980,6020,5590,5840,6000,4990],borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,.1)',fill:true,tension:.3,yAxisID:'y',pointRadius:4,pointBackgroundColor:'#2563eb',borderWidth:2},
+      {type:'bar',label:'月均下载（万）',data:[165,295,769,769,769,769,800,800,800,800,800],backgroundColor:'rgba(220,38,38,.6)',borderColor:'rgba(220,38,38,.8)',borderWidth:1,yAxisID:'y1',barThickness:'flex'},
+      {type:'line',label:'SOV%（买量力度）',data:[null,null,0.241,0.068,0.362,0.740,0.258,0.175,0.161,0.098,0.071],borderColor:'#b45309',backgroundColor:'transparent',yAxisID:'y2',pointRadius:4,pointBackgroundColor:'#b45309',borderWidth:2,borderDash:[5,3],tension:.3},
+    ]
+  },
+  options:{
+    ...commonOpts,
+    scales:{
+      x:{grid:{color:'#eef1f6'},ticks:{font:{size:11},color:'#7b8aa3'}},
+      y:{type:'linear',position:'left',title:{display:true,text:'MAU（万）',font:{size:12},color:'#2563eb'},grid:{color:'#eef1f6'},ticks:{color:'#2563eb',font:{size:11}}},
+      y1:{type:'linear',position:'right',title:{display:true,text:'月均下载（万）',font:{size:12},color:'#dc2626'},grid:{drawOnChartArea:false},ticks:{color:'#dc2626',font:{size:11}}},
+      y2:{type:'linear',display:false,position:'right',min:0,max:0.8},
+    },
+    plugins:{
+      ...commonOpts.plugins,
+      annotation:{
+        annotations:{
+          coldStart:{type:'label',xValue:0,xValue2:1,content:['冷启动\n付费76.5%'],backgroundColor:'rgba(220,38,38,.08)',borderColor:'rgba(220,38,38,.3)',borderWidth:1,color:'#dc2626',font:{size:9,weight:'bold'},yAdjust:-130},
+          burst:{type:'label',xValue:1,xValue2:5,content:['爆发期·增长期\n付费66–79%\nSOV峰值0.740%'],backgroundColor:'rgba(37,99,235,.08)',borderColor:'rgba(37,99,235,.3)',borderWidth:1,color:'#2563eb',font:{size:9,weight:'bold'},yAdjust:80},
+          steady:{type:'label',xValue:6,xValue2:10,content:['稳态·品牌自持\n付费57.4%\nSOV降90%'],backgroundColor:'rgba(5,150,105,.08)',borderColor:'rgba(5,150,105,.3)',borderWidth:1,color:'#059669',font:{size:9,weight:'bold'},yAdjust:-130},
+        }
+      }
+    }
+  }
+});
+
+// === Royal Kingdom Phase Chart (Downloads vs Ads) ===
+(function(){
+  const labels=['2023-04','2023-05','2023-06','2023-07','2023-08','2023-09','2023-10','2023-11','2023-12','2024-01','2024-02','2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];
+  const downloads=[19.0,20.4,19.8,19.8,27.3,28.1,28.0,49.1,27.9,16.2,11.7,11.8,23.2,30.0,38.5,39.4,50.6,48.3,43.1,289.2,254.0,203.8,165.8,177.0,434.5,998.8,1023.1,1110.4,1213.0,707.8,707.9,580.1,612.1,1028.4,643.4,712.1,1227.3,1015.2,818.4];
+  const ads=[142,419,355,534,425,491,647,975,927,767,130,85,429,551,569,726,2147,1953,1237,1105,1108,1001,1157,1511,3613,4346,4980,5524,5104,6486,6578,5639,5987,5584,5654,9431,15978,19169,11693];
+  // Phase boundaries: 测试期 0-18, 起步期 19-23, 大推期（成熟市场）24-32, 大推期（新兴市场扩量）33-38
+  const phases=[
+    {start:0,end:18,label:'测试期',color:'rgba(124,58,237,0.08)',border:'rgba(124,58,237,0.4)'},
+    {start:19,end:23,label:'起步期',color:'rgba(37,99,235,0.08)',border:'rgba(37,99,235,0.4)'},
+    {start:24,end:32,label:['大推期','（成熟市场）'],color:'rgba(220,38,38,0.08)',border:'rgba(220,38,38,0.4)'},
+    {start:33,end:38,label:['大推期','（新兴市场扩量）'],color:'rgba(5,150,105,0.08)',border:'rgba(5,150,105,0.4)'}
+  ];
+  const annotations={};
+  phases.forEach(function(p,i){
+    annotations['phase'+i]={type:'box',xMin:p.start-0.5,xMax:p.end+0.5,backgroundColor:p.color,borderColor:p.border,borderWidth:1,z:-1};
+    annotations['label'+i]={type:'label',xValue:(p.start+p.end)/2,yScaleID:'y',yValue:1300,content:p.label,color:p.border.replace(',0.4)',',1)'),font:{size:10,weight:'bold'},backgroundColor:'rgba(255,255,255,0.78)',borderRadius:3,padding:{top:2,bottom:2,left:5,right:5}};
+    if(i>0){
+      annotations['line'+i]={type:'line',xMin:p.start-0.5,xMax:p.start-0.5,borderColor:'rgba(100,116,139,0.4)',borderWidth:1,borderDash:[4,3]};
+    }
+  });
+  // 密集区采用近距离两层错位，并用引导线消除“标签对应不上”的歧义
+  addMilestone(annotations,'rkTest',{xValue:0,yValue:ads[0],content:'英/加/土启动测试',color:'#059669',xAdjust:38,yAdjust:-16});
+  addMilestone(annotations,'rkPhil',{xValue:3,yValue:ads[3],content:'追加菲律宾测试',color:'#2563eb',xAdjust:18,yAdjust:-34});
+  addMilestone(annotations,'rkAus',{xValue:16,yValue:ads[16],content:'追加澳大利亚测试',color:'#2563eb',xAdjust:-8,yAdjust:-18});
+  addMilestone(annotations,'rkLaunch',{xValue:19,yValue:ads[19],content:'正式上线',color:'#059669',xAdjust:-8,yAdjust:-36});
+  addMilestone(annotations,'rkIndia',{xValue:20,yValue:ads[20],content:'拓展印度地区',color:'#2563eb',xAdjust:22,yAdjust:-18});
+  addMilestone(annotations,'rkPE',{xValue:22,yValue:ads[22],content:'CVC+黑石~25亿',color:'#dc2626',xAdjust:12,yAdjust:-36});
+  const ctx=document.getElementById('chartRKPhase');
+  if(ctx){
+    new Chart(ctx,{
+      type:'bar',
+      data:{
+        labels:labels,
+        datasets:[
+          {type:'bar',label:'月下载（万）',data:downloads,backgroundColor:'rgba(37,99,235,0.6)',borderColor:'rgba(37,99,235,0.8)',borderWidth:1,yAxisID:'y',order:2},
+          {type:'line',label:'月广告数',data:ads,borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,0.1)',fill:false,tension:0.3,yAxisID:'y1',pointRadius:2,pointBackgroundColor:'#dc2626',borderWidth:2,order:1,spanGaps:true}
+        ]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{mode:'index',intersect:false},
+        plugins:{
+          legend:{display:true,position:'top',labels:{font:{size:12},color:'#4a5568'}},
+          tooltip:{backgroundColor:'#1a2233',titleFont:{size:13},bodyFont:{size:12},padding:10},
+          annotation:{annotations:annotations}
+        },
+        scales:{
+          x:{grid:{display:false},ticks:{font:{size:9},color:'#7b8aa3',maxRotation:45,autoSkip:true,autoSkipPadding:8}},
+          y:{type:'linear',position:'left',title:{display:true,text:'月下载（万）',font:{size:12},color:'#2563eb'},grid:{color:'#eef1f6'},ticks:{color:'#2563eb',font:{size:11}}},
+          y1:{type:'linear',position:'right',title:{display:true,text:'月广告数',font:{size:12},color:'#dc2626'},grid:{drawOnChartArea:false},ticks:{color:'#dc2626',font:{size:11}}}
+        }
+      }
+    });
+  }
+})();
+
+// === Project Makeover Phase Chart (Downloads vs Ads) ===
+(function(){
+  const labels=['2020-06','2020-07','2020-08','2020-09','2020-10','2020-11','2020-12','2021-01','2021-02','2021-03','2021-04','2021-05','2021-06','2021-07','2021-08','2021-09','2021-10','2021-11','2021-12','2022-01','2022-02','2022-03','2022-04','2022-05','2022-06','2022-07','2022-08','2022-09','2022-10','2022-11','2022-12','2023-01','2023-02','2023-03','2023-04','2023-05','2023-06','2023-07','2023-08','2023-09','2023-10','2023-11','2023-12','2024-01','2024-02','2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06','2026-07'];
+  const downloads=[null,null,null,7.1,17.9,1047.9,1416.9,2213.4,1001.3,881.6,860.0,813.4,675.5,523.6,620.3,593.9,496.9,481.2,554.4,762.1,507.4,375.1,267.6,275.5,317.4,262.9,312.7,273.6,272.0,225.3,275.4,397.3,368.5,350.1,371.5,564.1,442.8,566.5,611.6,673.8,521.6,650.1,617.2,745.4,465.5,451.4,487.5,481.2,550.4,486.5,324.5,372.8,392.6,427.4,357.3,235.2,157.5,137.7,190.1,219.9,173.4,170.8,169.9,121.0,88.3,72.1,89.4,166.2,170.3,147.4,113.5,131.4,103.4,52.3];
+  // 广告数（创意数, iOS+安卓）。前3月(2020-06~08)置null留白以完整展示"测试期"标签；2022-03 因广大大30天滚动周期归月边界跳空(相邻窗口分别落入2月/4月)，此处取相邻月均值插补(3852)以保线段连续；末月2026-07广大大未覆盖(最后窗口止于2026-06-24)故置null。
+  const ads=[null,null,null,55,101,844,1662,3844,6578,7343,5990,4357,2623,1705,1925,1669,2121,2795,1902,1911,4326,3852,3378,4037,6161,2562,1511,1625,2587,1788,1433,1291,1742,1885,1728,1717,1432,1435,1689,1563,1851,1730,2112,2584,2486,3113,3860,3633,3272,4734,4262,3968,3909,6038,6729,5932,8248,5118,4267,3995,4047,3682,3017,2656,2284,2265,3207,3874,2390,2286,2488,2388,2508,null];
+  // Phase boundaries: 测试期 3-4；大推期 5-9（至2021.03）；T1市场持续扩量自2021.04起；主投美国市场自2022.07起
+  const phases=[
+    {start:3,end:4,boxStart:0,label:'测试期',color:'rgba(13,148,136,0.08)',border:'rgba(13,148,136,0.4)'},
+    {start:5,end:9,label:'大推期',color:'rgba(220,38,38,0.08)',border:'rgba(220,38,38,0.4)'},
+    {start:10,end:24,label:['T1市场','持续扩量'],color:'rgba(37,99,235,0.08)',border:'rgba(37,99,235,0.4)'},
+    {start:25,end:73,label:['主投美国','市场'],color:'rgba(5,150,105,0.08)',border:'rgba(5,150,105,0.4)'}
+  ];
+  const annotations={};
+  phases.forEach(function(p,i){
+    annotations['phase'+i]={type:'box',xMin:(p.xMin!==undefined?p.xMin:(p.boxStart!==undefined?p.boxStart:p.start)-0.5),xMax:(p.xMax!==undefined?p.xMax:p.end+0.5),backgroundColor:p.color,borderColor:p.border,borderWidth:1,z:-1};
+    annotations['label'+i]={type:'label',xValue:(p.start+p.end)/2,yScaleID:'y',yValue:2050,content:p.label,color:p.border.replace(',0.4)',',1)'),font:{size:10,weight:'bold'},backgroundColor:'rgba(255,255,255,0.78)',borderRadius:3,padding:{top:2,bottom:2,left:5,right:5}};
+    if(i>0){
+      const boundary=(p.xMin!==undefined?p.xMin:p.start-0.5);
+      annotations['line'+i]={type:'line',xMin:boundary,xMax:boundary,borderColor:'rgba(100,116,139,0.4)',borderWidth:1,borderDash:[4,3]};
+    }
+  });
+  // 里程碑：点绑右轴 y1(广告数)、标签上下错开、文字不带日期(与其他案例一致)，hover时追加显示日期
+  addMilestone(annotations,'pmT1',{xValue:3,yValue:ads[3],content:'加/澳/荷/挪/新启动测试',date:'2020.09',color:'#2563eb',xAdjust:74,yAdjust:-20});
+  addMilestone(annotations,'pmT2',{xValue:4,yValue:ads[4],content:'追加日本测试',date:'2020.10',color:'#2563eb',xAdjust:40,yAdjust:-44});
+  addMilestone(annotations,'pmLaunch',{xValue:5,yValue:ads[5],content:'正式上线',date:'2020.11',color:'#059669',xAdjust:16,yAdjust:-64});
+  const ctx=document.getElementById('chartPMPhase');
+  if(ctx){
+    new Chart(ctx,{
+      type:'bar',
+      data:{
+        labels:labels,
+        datasets:[
+          {type:'bar',label:'月下载（万）',data:downloads,backgroundColor:'rgba(37,99,235,0.6)',borderColor:'rgba(37,99,235,0.8)',borderWidth:1,yAxisID:'y',order:2},
+          {type:'line',label:'月广告数',data:ads,borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,0.1)',fill:false,tension:0.3,yAxisID:'y1',pointRadius:2,pointBackgroundColor:'#dc2626',borderWidth:2,order:1,spanGaps:true}
+        ]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{mode:'index',intersect:false},
+        plugins:{
+          legend:{display:true,position:'top',labels:{font:{size:12},color:'#4a5568'}},
+          tooltip:{backgroundColor:'#1a2233',titleFont:{size:13},bodyFont:{size:12},padding:10},
+          annotation:{annotations:annotations}
+        },
+        scales:{
+          x:{grid:{display:false},ticks:{font:{size:9},color:'#7b8aa3',maxRotation:45,autoSkip:true,autoSkipPadding:8}},
+          y:{type:'linear',position:'left',title:{display:true,text:'月下载（万）',font:{size:12},color:'#2563eb'},grid:{color:'#eef1f6'},ticks:{color:'#2563eb',font:{size:11}}},
+          y1:{type:'linear',position:'right',title:{display:true,text:'月广告数',font:{size:12},color:'#dc2626'},grid:{drawOnChartArea:false},ticks:{color:'#dc2626',font:{size:11}}}
+        }
+      }
+    });
+  }
+})();
+
+// === Match Villains Chart (monthly: downloads bar + ads line) ===
+const mvMonthLabels=['2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];
+const mvDownloads=[1.19,1.03,1.0,0.68,3.13,7.7,10.86,25.85,29.23,45.2,32.45,59.94,58.59,63.35,130.32,237.57,327.28,278.44,271.55,312.27,139.47,133.54,172.94,189.08,25.53];
+const mvAds=[61,101,97,54,180,319,572,976,1674,1999,1648,3199,2482,2458,8770,9107,11021,8809,7312,5356,3615,4077,9747,21814,10093];
+// Phase boundaries: 测试期 0-5, 起步期 6-12, 爆发期 13-18, ROI调整期 19-24
+const mvPhases=[
+  {start:0,end:5,label:'测试期·极克制验证',color:'rgba(139,92,246,0.08)',border:'rgba(139,92,246,0.4)'},
+  {start:6,end:12,label:'起步期·产品就绪',color:'rgba(37,99,235,0.08)',border:'rgba(37,99,235,0.4)'},
+  {start:13,end:18,label:'爆发期·A轮后爆发',color:'rgba(220,38,38,0.08)',border:'rgba(220,38,38,0.4)'},
+  {start:19,end:24,label:'ROI调整期',color:'rgba(234,88,12,0.08)',border:'rgba(234,88,12,0.4)'}
+];
+const mvPhaseAnnotations={};
+mvPhases.forEach((p,i)=>{
+  mvPhaseAnnotations['mvPhase'+i]={type:'box',xMin:p.start-0.5,xMax:p.end+0.5,backgroundColor:p.color,borderColor:'transparent',borderWidth:0};
+  mvPhaseAnnotations['mvPhaseLabel'+i]={type:'label',xValue:(p.start+p.end)/2,yScaleID:'y',yValue:310,content:p.label,color:p.border.replace('0.4','1'),font:{size:9,weight:'bold'},backgroundColor:'rgba(255,255,255,0.78)',borderRadius:3,padding:{top:2,bottom:2,left:5,right:5}};
+});
+// 关键市场蓝 / 上线绿 / 融资红；全部绑定右轴 y1，并以短引导线明确对应点
+addMilestone(mvPhaseAnnotations,'mvPhil',{xValue:0,yValue:mvAds[0],content:'追加菲律宾测试',color:'#2563eb',xAdjust:35,yAdjust:-16});
+addMilestone(mvPhaseAnnotations,'mvUS',{xValue:5,yValue:mvAds[5],content:'首发上线美国',color:'#059669',xAdjust:-8,yAdjust:-16});
+addMilestone(mvPhaseAnnotations,'mvAuCa',{xValue:6,yValue:mvAds[6],content:'追加上线澳/加',color:'#2563eb',xAdjust:4,yAdjust:-36});
+addMilestone(mvPhaseAnnotations,'mvSeed',{xValue:7,yValue:mvAds[7],content:'种子轮$2300万',color:'#dc2626',xAdjust:30,yAdjust:-16});
+addMilestone(mvPhaseAnnotations,'mvBrAr',{xValue:9,yValue:mvAds[9],content:'上线巴西/阿根廷',color:'#2563eb',xAdjust:-8,yAdjust:-36});
+addMilestone(mvPhaseAnnotations,'mvLaunch',{xValue:10,yValue:mvAds[10],content:'全域正式上线',color:'#059669',xAdjust:22,yAdjust:-16});
+addMilestone(mvPhaseAnnotations,'mvARound',{xValue:13,yValue:mvAds[13],content:'A轮$6000万',color:'#dc2626',xAdjust:8,yAdjust:-20});
+
+new Chart(document.getElementById('chartMV'),{
+  type:'bar',
+  data:{
+    labels:mvMonthLabels,
+    datasets:[
+      {type:'bar',label:'月下载（万）',data:mvDownloads,backgroundColor:'rgba(139,92,246,.55)',borderColor:'rgba(139,92,246,.8)',borderWidth:1,yAxisID:'y',barThickness:'flex',order:2},
+      {type:'line',label:'月广告数',data:mvAds,borderColor:'#dc2626',backgroundColor:'transparent',yAxisID:'y1',pointRadius:2.5,pointBackgroundColor:'#dc2626',borderWidth:2.5,tension:.3,order:1}
+    ]
+  },
+  options:{
+    ...commonOpts,
+    scales:{
+      x:{grid:{color:'#eef1f6'},ticks:{font:{size:9},color:'#7b8aa3',maxRotation:45}},
+      y:{type:'linear',position:'left',title:{display:true,text:'月下载（万）',font:{size:11},color:'#8b5cf6'},grid:{color:'#eef1f6'},ticks:{color:'#8b5cf6',font:{size:10}}},
+      y1:{type:'linear',position:'right',title:{display:true,text:'月广告数',font:{size:11},color:'#dc2626'},grid:{drawOnChartArea:false},ticks:{color:'#dc2626',font:{size:10}}},
+    },
+    plugins:{
+      ...commonOpts.plugins,
+      annotation:{annotations:mvPhaseAnnotations}
+    }
+  }
+});
+
+// === RM vs RK Ad Relay Chart ===
+(function(){
+  const labels=['2023-01','2023-02','2023-03','2023-04','2023-05','2023-06','2023-07','2023-08','2023-09','2023-10','2023-11','2023-12','2024-01','2024-02','2024-03','2024-04','2024-05','2024-06','2024-07','2024-08','2024-09','2024-10','2024-11','2024-12','2025-01','2025-02','2025-03','2025-04','2025-05','2025-06','2025-07','2025-08','2025-09','2025-10','2025-11','2025-12','2026-01','2026-02','2026-03','2026-04','2026-05','2026-06'];
+  const rmAds=[2404,2419,2403,2878,3507,3710,5210,6412,6228,5033,5156,6274,6081,5589,5230,5367,5183,5466,5431,4681,4333,3533,2978,2358,2724,4324,3612,3740,4549,3580,4506,3975,3415,3314,2902,3891,4668,5633,7128,8098,8152,19270];
+  const rkAds=[0,0,13,142,419,355,534,425,491,647,975,927,767,130,85,429,551,569,726,2147,1953,1237,1105,1108,1001,1157,1511,3613,4346,4980,5524,5104,6486,6578,5639,5987,5584,5654,9431,15978,19169,11693];
+  const ctx=document.getElementById('chartRMRK_AdRelay');
+  if(ctx){
+    new Chart(ctx,{
+      type:'line',
+      data:{
+        labels:labels,
+        datasets:[
+          {label:'Royal Match 月广告数',data:rmAds,borderColor:'#2563eb',backgroundColor:'rgba(37,99,235,0.08)',fill:true,tension:0.3,pointRadius:2,pointBackgroundColor:'#2563eb',borderWidth:2.5},
+          {label:'Royal Kingdom 月广告数',data:rkAds,borderColor:'#dc2626',backgroundColor:'rgba(220,38,38,0.08)',fill:true,tension:0.3,pointRadius:2,pointBackgroundColor:'#dc2626',borderWidth:2.5}
+        ]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{mode:'index',intersect:false},
+        plugins:{
+          legend:{display:true,position:'top',labels:{font:{size:12},color:'#4a5568'}},
+          tooltip:{backgroundColor:'#1a2233',titleFont:{size:13},bodyFont:{size:12},padding:10},
+          annotation:{
+            annotations:{
+              phase1Box:{type:'box',xMin:22,xMax:34,backgroundColor:'rgba(220,38,38,0.04)',borderColor:'transparent',borderWidth:0,label:{display:true,content:'2024.11–2025.11  RK起量 · RM平稳',color:'#dc2626',font:{size:10,weight:'bold'},position:'start',padding:4}},
+              phase2Box:{type:'box',xMin:35,xMax:41,backgroundColor:'rgba(37,99,235,0.04)',borderColor:'transparent',borderWidth:0,label:{display:true,content:'2025.12–至今  RK·RM 双线并行放量',color:'#2563eb',font:{size:10,weight:'bold'},position:'start',padding:4}},
+              rkLaunchPt:{type:'point',xValue:22,yValue:1105,radius:6,backgroundColor:'#dc2626',borderColor:'#fff',borderWidth:2},
+              rkLaunchLabel:{type:'label',xValue:22,yValue:1105,content:'RK全球发布',color:'#dc2626',font:{size:9,weight:'bold'},backgroundColor:'rgba(255,255,255,0.92)',borderColor:'#dc2626',borderWidth:1,borderRadius:3,padding:{top:2,bottom:2,left:5,right:5},yAdjust:-18},
+              rkPushPt:{type:'point',xValue:27,yValue:3613,radius:6,backgroundColor:'#dc2626',borderColor:'#fff',borderWidth:2},
+              rkPushLabel:{type:'label',xValue:27,yValue:3613,content:'RK大推启动',color:'#dc2626',font:{size:9,weight:'bold'},backgroundColor:'rgba(255,255,255,0.92)',borderColor:'#dc2626',borderWidth:1,borderRadius:3,padding:{top:2,bottom:2,left:5,right:5},yAdjust:-18}
+            }
+          }
+        },
+        scales:{
+          x:{grid:{display:false},ticks:{font:{size:9},color:'#7b8aa3',maxRotation:45,autoSkip:true,autoSkipPadding:10}},
+          y:{type:'linear',position:'left',title:{display:true,text:'月广告数',font:{size:12},color:'#4a5568'},grid:{color:'#eef1f6'},ticks:{color:'#4a5568',font:{size:11}}}
+        }
+      }
+    });
+  }
+})();
+</script>
+
+<!-- ============================================================ -->
+<!-- EDITING & ANNOTATION TOOLBAR -->
+<!-- ============================================================ -->
+<style>
+/* Toolbar */
+.edit-toolbar{position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#1a2233;border-top:2px solid var(--accent);padding:10px 24px;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px rgba(0,0,0,.2);font-size:13px;color:#e2e8f0}
+.edit-toolbar .tb-btn{padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;border:1px solid #334155;background:#0f172a;color:#e2e8f0;transition:.15s;white-space:nowrap}
+.edit-toolbar .tb-btn:hover{background:#334155}
+.edit-toolbar .tb-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.edit-toolbar .tb-sep{width:1px;height:24px;background:#334155;margin:0 4px}
+.edit-toolbar .tb-status{margin-left:auto;font-size:11px;color:#7b8aa3}
+
+/* Editable highlight */
+[contenteditable="true"]{outline:2px dashed var(--accent);outline-offset:2px;border-radius:4px;transition:outline .2s}
+[contenteditable="true"]:focus{outline:2px solid var(--accent);background:rgba(37,99,235,.03)}
+
+/* Annotation highlights */
+.annotated{background:rgba(251,191,36,.25);border-bottom:2px solid #f59e0b;cursor:pointer;position:relative}
+.annotated:hover{background:rgba(251,191,36,.4)}
+/* v7 数据更新高亮（本轮改动的文字标记） */
+.v7upd{background:rgba(250,204,21,.45);border-bottom:1px dashed #ca8a04;border-radius:2px;padding:0 1px}
+
+/* Annotation panel */
+.ann-panel{position:fixed;top:0;right:0;width:320px;height:100vh;background:var(--card);border-left:1px solid var(--line);z-index:9998;overflow-y:auto;padding:20px;transform:translateX(100%);transition:transform .3s;box-shadow:-4px 0 20px rgba(0,0,0,.1)}
+.ann-panel.open{transform:translateX(0)}
+.ann-panel .ap-title{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.ann-panel .ap-close{cursor:pointer;font-size:18px;color:var(--dim);padding:4px 8px;border-radius:4px}
+.ann-panel .ap-close:hover{background:var(--card2);color:var(--ink)}
+.ann-item{background:var(--card2);border:1px solid var(--line);border-left:3px solid #f59e0b;border-radius:6px;padding:12px 14px;margin-bottom:10px;font-size:13px}
+.ann-item .ai-quote{color:var(--dim);font-style:italic;font-size:12px;margin-bottom:6px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.ann-item .ai-comment{color:var(--ink);line-height:1.6}
+.ann-item .ai-meta{margin-top:6px;font-size:11px;color:var(--dim);display:flex;justify-content:space-between;align-items:center}
+.ann-item .ai-del{cursor:pointer;color:var(--red);font-size:11px;font-weight:600}
+.ann-item .ai-del:hover{text-decoration:underline}
+
+/* Comment input popup */
+.comment-popup{position:fixed;z-index:10000;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.15);padding:14px;width:300px;display:none}
+.comment-popup textarea{width:100%;min-height:60px;border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:13px;font-family:inherit;resize:vertical;outline:none}
+.comment-popup textarea:focus{border-color:var(--accent)}
+.comment-popup .cp-btns{display:flex;gap:8px;margin-top:8px;justify-content:flex-end}
+.comment-popup .cp-btn{padding:5px 12px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;border:none}
+.comment-popup .cp-save{background:var(--accent);color:#fff}
+.comment-popup .cp-save:hover{background:var(--accent2)}
+.comment-popup .cp-cancel{background:var(--card2);color:var(--sub);border:1px solid var(--line)}
+</style>
+
+<!-- ====== DO NOT REMOVE: Edit/Annotate Toolbar (will not appear in exported edited versions) ====== -->
+<!-- Toolbar UI -->
+<div id="toolbar" style="position:fixed;bottom:0;left:0;right:0;background:#1e293b;padding:8px 24px;display:flex;align-items:center;gap:12px;z-index:9999;box-shadow:0 -2px 8px rgba(0,0,0,.15);">
+  <button id="btnEdit" onclick="toggleEdit()" style="background:#3b82f6;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;">&#9998; 进入编辑</button>
+  <button id="btnSave" onclick="saveEdits()" style="display:none;background:#10b981;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;">&#128190; 保存修改</button>
+  <button id="btnAnnotate" onclick="toggleAnnotate()" style="background:#f59e0b;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;">&#128172; 批注模式</button>
+  <span id="tbStatus" style="margin-left:auto;color:#94a3b8;font-size:12px;">就绪</span>
+</div>
+
+<!-- Annotation panel -->
+<div id="annPanel" style="display:none;position:fixed;top:0;right:0;width:320px;height:100%;background:#f8fafc;border-left:1px solid #e2e8f0;overflow-y:auto;z-index:9998;padding:16px;">
+  <h3 style="margin:0 0 12px;font-size:15px;">&#128221; 批注列表 <span id="annCount" style="background:#3b82f6;color:#fff;border-radius:10px;padding:1px 7px;font-size:12px;margin-left:6px;">0</span></h3>
+  <div id="annList"></div>
+</div>
+
+<!-- Comment popup -->
+<div id="commentPopup" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:12px;padding:20px;box-shadow:0 8px 32px rgba(0,0,0,.2);z-index:10000;width:360px;">
+  <h4 style="margin:0 0 8px;">添加批注</h4>
+  <p id="popupText" style="font-size:13px;color:#64748b;margin:0 0 12px;"></p>
+  <textarea id="commentInput" style="width:100%;height:80px;border:1px solid #e2e8f0;border-radius:6px;padding:8px;font-size:13px;resize:none;" placeholder="输入批注内容..."></textarea>
+  <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end;">
+    <button onclick="cancelComment()" style="background:#f1f5f9;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;">取消</button>
+    <button onclick="saveComment()" style="background:#3b82f6;color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px;">提交</button>
+  </div>
+</div>
+
+
+
+<script>
+// ===== STATE =====
+let editMode = false;
+let annotateMode = false;
+let annotations = JSON.parse(localStorage.getItem('v6_annotations') || '[]');
+let pendingRange = null;
+let pendingText = '';
+
+const content = document.querySelector('.content');
+const editables = content.querySelectorAll('p, li, h2, h3, h4, td, .lead, .note, .warn');
+
+// ===== EDIT MODE =====
+function toggleEdit() {
+  editMode = !editMode;
+  const btn = document.getElementById('btnEdit');
+  btn.classList.toggle('active', editMode);
+  btn.textContent = editMode ? '📖 退出编辑' : '✏️ 进入编辑';
+  editables.forEach(el => {
+    if (editMode) {
+      el.setAttribute('contenteditable', 'true');
+    } else {
+      el.removeAttribute('contenteditable');
+    }
+  });
+  // Show/hide save button only in edit mode
+  document.getElementById('btnSave').style.display = editMode ? '' : 'none';
+  setStatus(editMode ? '编辑模式已开启 — 点击任意段落直接修改' : '已退出编辑，当前为阅览模式');
+  // Turn off annotate if edit is on
+  if (editMode && annotateMode) toggleAnnotate();
+}
+
+// ===== ANNOTATE MODE =====
+function toggleAnnotate() {
+  annotateMode = !annotateMode;
+  document.getElementById('btnAnnotate').classList.toggle('active', annotateMode);
+  setStatus(annotateMode ? '批注模式 — 选中文字后松开鼠标即可添加批注' : '批注模式已关闭');
+  if (annotateMode && editMode) toggleEdit();
+}
+
+// Listen for text selection in annotate mode
+document.addEventListener('mouseup', (e) => {
+  if (!annotateMode) return;
+  if (e.target.closest('.comment-popup') || e.target.closest('.ann-panel') || e.target.closest('.edit-toolbar')) return;
+  
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed || sel.toString().trim().length === 0) return;
+  
+  pendingText = sel.toString().trim();
+  pendingRange = sel.getRangeAt(0).cloneRange();
+  
+  // Show popup near selection
+  const rect = sel.getRangeAt(0).getBoundingClientRect();
+  const popup = document.getElementById('commentPopup');
+  popup.style.display = 'block';
+  popup.style.top = Math.min(rect.bottom + 8, window.innerHeight - 180) + 'px';
+  popup.style.left = Math.min(rect.left, window.innerWidth - 320) + 'px';
+  popup.style.transform = 'none';
+  document.getElementById('popupText').textContent = '"' + pendingText.substring(0, 60) + (pendingText.length > 60 ? '...' : '') + '"';
+  document.getElementById('commentInput').value = '';
+  document.getElementById('commentInput').focus();
+});
+
+function saveComment() {
+  const comment = document.getElementById('commentInput').value.trim();
+  if (!comment || !pendingRange) { cancelComment(); return; }
+  
+  // Wrap selected text with highlight span
+  const span = document.createElement('span');
+  span.className = 'annotated';
+  const id = 'ann-' + Date.now();
+  span.dataset.annId = id;
+  span.title = comment;
+  
+  try {
+    pendingRange.surroundContents(span);
+  } catch(e) {
+    // If selection crosses elements, just note it
+    span.textContent = pendingText;
+  }
+  
+  // Save annotation
+  const ann = { id, quote: pendingText.substring(0, 80), comment, time: new Date().toLocaleString('zh-CN') };
+  annotations.push(ann);
+  localStorage.setItem('v6_annotations', JSON.stringify(annotations));
+  
+  renderAnnotations();
+  cancelComment();
+  setStatus('批注已添加 ✓');
+}
+
+function cancelComment() {
+  document.getElementById('commentPopup').style.display = 'none';
+  pendingRange = null;
+  pendingText = '';
+  window.getSelection().removeAllRanges();
+}
+
+// ===== ANNOTATION PANEL =====
+function togglePanel() {
+  document.getElementById('annPanel').classList.toggle('open');
+}
+
+function renderAnnotations() {
+  const list = document.getElementById('annList');
+  const count = document.getElementById('annCount');
+  count.textContent = annotations.length;
+  
+  if (annotations.length === 0) {
+    list.innerHTML = '<p style="color:var(--dim);font-size:13px;text-align:center;margin-top:40px">暂无批注<br><br>在批注模式下，选中文字即可添加</p>';
+    return;
+  }
+  
+  list.innerHTML = annotations.map((a, i) => `
+    <div class="ann-item">
+      <div class="ai-quote">"${a.quote}${a.quote.length >= 80 ? '...' : ''}"</div>
+      <div class="ai-comment">${a.comment}</div>
+      <div class="ai-meta">
+        <span>${a.time}</span>
+        <span class="ai-del" onclick="deleteAnn(${i})">删除</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function deleteAnn(index) {
+  const ann = annotations[index];
+  // Remove highlight from DOM
+  const el = document.querySelector(`[data-ann-id="${ann.id}"]`);
+  if (el) {
+    const parent = el.parentNode;
+    while (el.firstChild) parent.insertBefore(el.firstChild, el);
+    parent.removeChild(el);
+  }
+  annotations.splice(index, 1);
+  localStorage.setItem('v6_annotations', JSON.stringify(annotations));
+  renderAnnotations();
+  setStatus('批注已删除');
+}
+
+// ===== SUBMIT ANNOTATIONS =====
+function submitAnnotations() {
+  if (annotations.length === 0) { setStatus('暂无批注可提交'); return; }
+  
+  // Process each annotation: apply the comment as an edit to the annotated text
+  let appliedCount = 0;
+  annotations.forEach((ann) => {
+    const el = document.querySelector(`[data-ann-id="${ann.id}"]`);
+    if (el) {
+      // The comment is treated as the replacement/instruction
+      // If the comment starts with specific action keywords, handle accordingly
+      const comment = ann.comment.trim();
+      
+      if (comment.startsWith('删除') || comment.startsWith('删掉') || comment === '删') {
+        // Delete the annotated content
+        el.parentNode.removeChild(el);
+        appliedCount++;
+      } else if (comment.startsWith('改为') || comment.startsWith('替换为') || comment.startsWith('改成')) {
+        // Replace with specified content
+        const newText = comment.replace(/^(改为|替换为|改成)[：:\s]*/, '');
+        const textNode = document.createTextNode(newText);
+        el.parentNode.replaceChild(textNode, el);
+        appliedCount++;
+      } else {
+        // Default: treat the comment as replacement text directly
+        // If comment looks like a direct replacement (doesn't start with a verb/instruction)
+        const textNode = document.createTextNode(comment);
+        el.parentNode.replaceChild(textNode, el);
+        appliedCount++;
+      }
+    }
+  });
+  
+  // Clear all annotations after applying
+  annotations = [];
+  localStorage.setItem('v6_annotations', JSON.stringify(annotations));
+  renderAnnotations();
+  
+  setStatus(`已应用 ${appliedCount} 条批注修改 ✓`);
+}
+
+// ===== SAVE EDITS =====
+function saveEdits() {
+  // Download the current page as a new HTML file (source of truth)
+  const clone = document.documentElement.cloneNode(true);
+  // Remove toolbar, panel, popup from clone
+  ['toolbar','annPanel','commentPopup'].forEach(id => {
+    const el = clone.querySelector('#' + id);
+    if (el) el.remove();
+  });
+  // Remove contenteditable attributes
+  clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+  // Remove annotation highlights (keep text)
+  clone.querySelectorAll('.annotated').forEach(el => {
+    const parent = el.parentNode;
+    while (el.firstChild) parent.insertBefore(el.firstChild, el);
+    parent.removeChild(el);
+  });
+  
+  const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+  const blob = new Blob([html], {type: 'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '头部三消产品发行与买量深度分析（v6-edited）.html';
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  // Clear any stale localStorage to avoid future conflicts
+  localStorage.removeItem('v6_saved_content');
+  localStorage.removeItem('v6_saved_time');
+  
+  setStatus('已下载编辑版 ✓ — 请用下载文件替换原文件以永久保存');
+}
+
+// ===== CLEAR STALE LOCALSTORAGE ON LOAD =====
+// Source file is the single source of truth; localStorage caching is removed
+// to prevent stale edits from overriding code-level updates.
+(function clearStaleSaved() {
+  localStorage.removeItem('v6_saved_content');
+  localStorage.removeItem('v6_saved_time');
+})();
+
+// ===== UTILS =====
+function setStatus(msg) {
+  const el = document.getElementById('tbStatus');
+  el.textContent = msg;
+  setTimeout(() => { el.textContent = '就绪'; }, 3000);
+}
+
+// Init: render existing annotations
+renderAnnotations();
+
+// Restore highlights from saved annotations
+annotations.forEach(ann => {
+  // Try to find and highlight saved text (best effort on reload)
+});
+
+// Keyboard shortcut: Escape to exit modes
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (document.getElementById('commentPopup').style.display === 'block') cancelComment();
+    else if (editMode) toggleEdit();
+    else if (annotateMode) toggleAnnotate();
+  }
+});
+</script>
+
+
+</body></html>
